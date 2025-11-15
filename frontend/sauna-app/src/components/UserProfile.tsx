@@ -47,7 +47,7 @@ export function UserProfile({ user, isSelected, onSelect, delay }: UserProfilePr
           whileTap={{ scale: 0.95 }}
         >
           <ImageWithFallback
-            src={user.imagePath}
+            src={user.imagePath} 
             alt={user.name}
             className="w-full h-full object-cover"
           />

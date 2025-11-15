@@ -40,11 +40,17 @@ export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartSc
 
 
 useEffect(() => {
-  axios
-    .get('http://localhost:3000/api/users')
-    .then(res => setUsers(res.data.users as User[]))
+  axios.get('http://localhost:3000/api/users')
+    .then(res => {
+      const usersWithLeadingSlash = res.data.users.map((u: User) => ({
+        ...u,
+        imagePath: `/${u.imagePath}` // prepend slash once
+      }));
+      setUsers(usersWithLeadingSlash);
+    })
     .catch(console.error);
 }, []);
+
   return (
     <div className="StartScreen">
       <div className="bg-glow"></div>
@@ -83,6 +89,8 @@ useEffect(() => {
           />
         ))}
       </div>
+
+
 
       <motion.button
         className="next-button"
