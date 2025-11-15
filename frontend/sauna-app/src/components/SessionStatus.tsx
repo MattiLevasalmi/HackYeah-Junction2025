@@ -38,7 +38,7 @@ export function SessionStatus({ isPowerOn, simulationId }: SessionStatusProps) {
 
         setTemperature(data.temperature);
         setHumidity(data.humidity);
-        setDuration(formatDuration(data.duration));
+        setDuration(`${formatDuration(data.duration)} / ${status.targetDuration}:00`);
       } catch (err) {
         console.error("Polling error:", err);
       }

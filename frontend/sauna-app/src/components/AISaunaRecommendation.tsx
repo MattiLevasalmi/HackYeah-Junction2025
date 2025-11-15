@@ -1,23 +1,56 @@
 import { motion } from "motion/react";
 import "./AISaunaRecommendation.css";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
+interface Recommendation {
+  temperature: number;
+  humidity: number;
+  duration: number;
+  breaks: number;
+  stressLevel: number;
+  nextSession: {hours: number, minutes: number};
+}
 
 interface AISaunaRecommendationProps {
   users: string[];
   onBack: () => void;
-  onStartSauna: () => void; // add this
+  onStartSauna: (id: string, preset: any) => void; // add this
 }
 
 export function AISaunaRecommendation({ users, onBack, onStartSauna }: AISaunaRecommendationProps) {
+  const [preset, setPreset] = useState<Recommendation | null>(null);
+  const handleStartSauna = async () => {
+    let simId: string | undefined;
+    const body = {
+      targetTemperature: preset?.temperature,
+      targetHumidity: preset?.humidity,
+      duration: preset?.duration,
+    };
+    try {
+      const resp = await axios.post('http://localhost:3000/api/simulation/start', body);
+      if (resp?.data?.status === 'Simulation started') {
+        simId = resp.data.simulationId;
+      } else {
+        console.error('Failed to start simulation', resp?.data);
+      }
+    } catch (err) {
+      console.error('Error starting simulation', err);
+    }
+    if (simId) onStartSauna(simId, body);
+  }
+
   // Mock prediction data
-  const prediction = {
+  useEffect(() => {
+    setPreset({
     temperature: 78 + users.length * 2,
     humidity: 35 + users.length * 1.5,
     duration: 25,
     breaks: 2,
     stressLevel: Math.floor(Math.random() * 4 + 5),
     nextSession: { hours: 4, minutes: 30 },
-  };
+    });
+  }, []);
 
   return (
     <div className="ai-rec-container">
@@ -44,28 +77,28 @@ export function AISaunaRecommendation({ users, onBack, onStartSauna }: AISaunaRe
         >
           <div className="ai-rec-row">
             <span>Recommended Temperature:</span>
-            <span>{prediction.temperature}°C</span>
+            <span>{preset?.temperature}°C</span>
           </div>
           <div className="ai-rec-row">
             <span>Recommended Humidity:</span>
-            <span>{prediction.humidity}%</span>
+            <span>{preset?.humidity}%</span>
           </div>
           <div className="ai-rec-row">
             <span>Session Duration:</span>
-            <span>{prediction.duration} min</span>
+            <span>{preset?.duration} min</span>
           </div>
           <div className="ai-rec-row">
             <span>Breaks:</span>
-            <span>{prediction.breaks}</span>
+            <span>{preset?.breaks}</span>
           </div>
           <div className="ai-rec-row">
             <span>Stress Level After Sauna:</span>
-            <span>{prediction.stressLevel}/10</span>
+            <span>{preset?.stressLevel}/10</span>
           </div>
           <div className="ai-rec-row">
             <span>Next Session:</span>
             <span>
-              {prediction.nextSession.hours}h {prediction.nextSession.minutes}m
+              {preset?.nextSession.hours}h {preset?.nextSession.minutes}m
             </span>
           </div>
         </motion.div>
@@ -93,7 +126,7 @@ export function AISaunaRecommendation({ users, onBack, onStartSauna }: AISaunaRe
 
   {/* Start Sauna button with glowing orange style */}
   <motion.button
-    onClick={onStartSauna}
+    onClick={handleStartSauna}
     whileHover={{ scale: 1.05, boxShadow: "0 0 25px rgba(234,88,12,0.9)" }}
     whileTap={{ scale: 0.95 }}
     style={{
