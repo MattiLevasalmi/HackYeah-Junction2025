@@ -1,12 +1,21 @@
 import { MongoClient, ServerApiVersion, Db, Collection } from "mongodb";
 
 export interface User {
-  _id?: string;
-  userId: string;
-  name: string;
-  imagePath: string;
-  age: number;
-  gender: string;
+  email: string
+  firstName: string
+  lastName: string
+  imagePath: string
+  age: number
+  sex: string
+  experienceLevel: string
+  preferences: {
+    temperature: number
+    humidity: number
+    sessionDuration: number
+    notifications: boolean
+  }
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Session {

@@ -19,7 +19,7 @@ export const startSimulation = (req: Request, res: Response) => {
       targetHumidity: targetHumidity || 60,
       duration: duration || 30,
       userIds: userIds || [],
-      message: `Simulation started. Each real second equals 30 simulated seconds.`,
+      message: `Simulation started. Each real second equals 10 simulated seconds.`,
     });
   } catch (error) {
     res.status(500).json({

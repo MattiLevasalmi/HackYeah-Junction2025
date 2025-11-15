@@ -4,54 +4,92 @@ import { getAllUsers, createNewUser, updateUser } from "../services/user.service
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await getAllUsers();
+
+    // Already trimmed by service: { userId, firstName, lastName, imagePath }
     res.json({ users });
   } catch (error) {
-    res.status(500).json({ message: error instanceof Error ? error.message : "Unknown error" });
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 };
 
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const { name, imagePath } = req.body;
+    const { firstName, lastName, imagePath } = req.body;
 
-    if (!name) {
-      return res.status(400).json({ message: "Name is required" });
+    if (!firstName) {
+      return res.status(400).json({ message: "firstName is required" });
+    }
+    if (!lastName) {
+      return res.status(400).json({ message: "lastName is required" });
     }
     if (!imagePath) {
-      return res.status(400).json({ message: "Image Path is required" });
+      return res.status(400).json({ message: "imagePath is required" });
     }
 
-    const newUser = await createNewUser(name, imagePath);
+    const newUser = await createNewUser(firstName, lastName, imagePath);
+
     res.status(201).json({ user: newUser });
   } catch (error) {
-    res.status(500).json({ message: error instanceof Error ? error.message : "Unknown error" });
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 };
 
 export const updateUserProfile = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const { name, imagePath, age, gender } = req.body;
+    const {
+      firstName,
+      lastName,
+      imagePath,
+      age,
+      sex,
+      experienceLevel,
+      preferences,
+    } = req.body;
 
     if (!userId) {
       return res.status(400).json({ message: "userId param is required" });
     }
 
-    const updates: { name?: string; imagePath?: string; age?: number; gender?: string } = {};
-    if (name !== undefined) updates.name = name;
+    const updates: any = {};
+
+    if (firstName !== undefined) updates.firstName = firstName;
+    if (lastName !== undefined) updates.lastName = lastName;
     if (imagePath !== undefined) updates.imagePath = imagePath;
     if (age !== undefined) updates.age = Number(age);
-    if (gender !== undefined) updates.gender = gender;
+    if (sex !== undefined) updates.sex = sex;
+    if (experienceLevel !== undefined) updates.experienceLevel = experienceLevel;
+
+    // Preferences are nested
+    if (preferences && typeof preferences === "object") {
+      updates.preferences = {};
+
+      if (preferences.temperature !== undefined)
+        updates.preferences.temperature = preferences.temperature;
+      if (preferences.humidity !== undefined)
+        updates.preferences.humidity = preferences.humidity;
+      if (preferences.sessionDuration !== undefined)
+        updates.preferences.sessionDuration = preferences.sessionDuration;
+      if (preferences.notifications !== undefined)
+        updates.preferences.notifications = preferences.notifications;
+    }
 
     if (Object.keys(updates).length === 0) {
       return res.status(400).json({ message: "No valid fields to update" });
     }
 
     const updated = await updateUser(userId, updates);
-    if (!updated) return res.status(404).json({ message: "User not found" });
+    if (!updated)
+      return res.status(404).json({ message: "User not found" });
 
     res.json({ user: updated });
   } catch (error) {
-    res.status(500).json({ message: error instanceof Error ? error.message : "Unknown error" });
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 };
