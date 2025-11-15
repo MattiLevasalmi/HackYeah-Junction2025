@@ -4,13 +4,14 @@ import { NextScreen } from "./components/NextScreen";
 import { PhoneEmulator } from "./components/PhoneEmulator";
 import { SaunaView } from "./components/SaunaView";
 import { AISaunaMode } from "./components/AISaunaMode";
+import { AISaunaRecommendation } from "./components/AISaunaRecommendation";
+import { motion, AnimatePresence } from "motion/react";
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'start' | 'next' | 'sauna' | 'ai'>('start');
+  const [currentScreen, setCurrentScreen] = useState<'start' | 'next' | 'sauna' | 'ai' | 'aiRec'>('start');
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const handleNext = () => setCurrentScreen('next');
-  const handleStartSauna = () => setCurrentScreen('sauna');
   const handleBack = () => {
     setCurrentScreen('start');
     setSelectedUsers([]);
@@ -19,7 +20,7 @@ export default function App() {
   return (
     <>
       {currentScreen === 'sauna' ? (
-        <SaunaView />
+        <SaunaView /> // Full-page sauna view
       ) : (
         <div className="min-h-screen w-full bg-gradient-to-br from-zinc-950 via-neutral-900 to-zinc-900 
                         flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
@@ -31,7 +32,6 @@ export default function App() {
           </div>
 
           <PhoneEmulator>
-
             {currentScreen === 'start' && (
               <StartScreen
                 selectedUsers={selectedUsers}
@@ -45,26 +45,61 @@ export default function App() {
                 onBack={handleBack}
                 selectedUsers={selectedUsers}
               >
-                {/* Glowing orange NEXT button */}
-                <button
-                  className="mt-6 bg-orange-600 text-white px-6 py-3 rounded-xl shadow-lg shadow-orange-500/40 
-                             text-lg font-medium w-full transition hover:bg-orange-500"
-                  onClick={() => setCurrentScreen('ai')}
-                >
-                  Next
-                </button>
+               <motion.button
+                onClick={() => setCurrentScreen('ai')}
+                disabled={selectedUsers.length === 0}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                style={{
+                  width: "100%",
+                  padding: "1rem 0",
+                  marginTop: "auto",
+                  borderRadius: "1rem",
+                  backgroundColor: "#ea580c",
+                  color: "#ffffff", // primary-foreground
+                  fontWeight: 500,
+                  textAlign: "center",
+                  position: "relative",
+                  overflow: "hidden",
+                  cursor: selectedUsers.length === 0 ? "not-allowed" : "pointer",
+                  opacity: selectedUsers.length === 0 ? 0.5 : 1,
+                  transition: "transform 0.2s ease, opacity 0.2s ease",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    background: "linear-gradient(to right, #ea580c, #d47018)",
+                    filter: "blur(1rem)",
+                    opacity: 0.6,
+                    transition: "opacity 0.3s ease",
+                    pointerEvents: "none", // ensures glow doesn't block clicks
+                  }}
+                ></div>
+                <span style={{ position: "relative", zIndex: 1 }}>Next</span>
+              </motion.button>
               </NextScreen>
             )}
 
             {currentScreen === 'ai' && (
-             <AISaunaMode
-                onClick={() => setCurrentScreen('ai')} // now Confirm triggers AI Recommendation
+              <AISaunaMode
+                onClick={() => setCurrentScreen('aiRec')} // Go to AI Recommendation
               />
             )}
 
+            {currentScreen === 'aiRec' && (
+              <AISaunaRecommendation
+                users={selectedUsers}
+                onBack={() => setCurrentScreen('ai')}       // Back to AI selection
+                onStartSauna={() => setCurrentScreen('sauna')} // Start full-page sauna
+              />
+            )}
           </PhoneEmulator>
         </div>
       )}
     </>
   );
 }
+

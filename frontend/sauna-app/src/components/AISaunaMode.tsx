@@ -136,20 +136,50 @@ export function AISaunaMode({ onClick }: AISaunaModeProps) {
             ))}
           </div>
 
-          <div className="ai-action-row">
-  <button
-    className={`ai-confirm ${current.id !== "ai" ? "disabled" : ""}`}
-    onClick={() => {
-      if (current.id === "ai" && onClick) {
-        onClick(); // trigger parent callback
-      }
-    }}
-    aria-label="Confirm selection"
-    disabled={current.id !== "ai"} // only enable when AI mode is active
-  >
-    Confirm
-  </button>
-</div>
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "1rem" }}>
+          <button
+            onClick={onClick}
+            disabled={current.id !== "ai"}
+            style={{
+              position: "relative",
+              cursor: current.id !== "ai" ? "not-allowed" : "pointer",
+              opacity: current.id !== "ai" ? 0.4 : 1,
+              padding: "0.75rem 1.5rem",
+              borderRadius: "0.75rem",
+              background: current.id !== "ai"
+                ? "rgba(255,255,255,0.02)"
+                : "linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03))",
+              border: current.id !== "ai"
+                ? "1px solid rgba(255,255,255,0.04)"
+                : "1px solid rgba(255,255,255,0.08)",
+              color: "#fff",
+              fontWeight: 600,
+              overflow: "hidden",
+              textAlign: "center",
+              transition: "all 0.3s ease",
+              boxShadow: current.id === "ai"
+                ? "0 0 10px rgba(59,130,246,0.6), 0 0 20px rgba(59,130,246,0.4), 0 0 30px rgba(255,255,255,0.3)"
+                : "none",
+            }}
+          >
+            Confirm
+            {/* Glow layer */}
+            {current.id === "ai" && (
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  borderRadius: "0.75rem",
+                  background: "linear-gradient(90deg, rgba(59,130,246,0.3), rgba(255,255,255,0.2), rgba(59,130,246,0.3))",
+                  filter: "blur(0.75rem)",
+                  opacity: 0.7,
+                  pointerEvents: "none",
+                }}
+              />
+            )}
+          </button>
+        </div>
+
 
         </div>
       </div>
