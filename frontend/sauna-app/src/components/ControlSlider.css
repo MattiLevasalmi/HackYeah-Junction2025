@@ -1,0 +1,393 @@
+/* Control Slider Container */
+.control-slider-container {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.control-slider-container:not(.disabled):hover {
+  transform: translateX(2px);
+}
+
+/* Icon container enhancements */
+.control-slider-icon-container {
+  position: relative;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.control-slider-container:not(.disabled):hover .control-slider-icon-container {
+  background: rgba(38, 38, 38, 0.8) !important;
+  transform: scale(1.05);
+}
+
+.control-slider-icon-container::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.03));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.control-slider-container:not(.disabled):hover .control-slider-icon-container::before {
+  opacity: 1;
+}
+
+/* Label styling */
+.control-slider-label {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: color 0.3s ease;
+}
+
+.control-slider-container:not(.disabled):hover .control-slider-label {
+  color: #ffffff;
+}
+
+/* Value display enhancement */
+.control-slider-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  transition: all 0.3s ease;
+}
+
+.control-slider-container:not(.disabled):hover .control-slider-value {
+  transform: scale(1.05);
+}
+
+.control-slider-unit {
+  font-size: 0.875rem;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* Track styling */
+.control-slider-track {
+  position: relative;
+  height: 0.5rem;
+  background: linear-gradient(90deg, #262626 0%, #171717 100%);
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.4),
+    0 1px 2px rgba(255, 255, 255, 0.05);
+}
+
+.control-slider-container:not(.disabled):hover .control-slider-track {
+  height: 0.625rem;
+  transition: height 0.2s ease;
+}
+
+/* Progress bar with color variations */
+.control-slider-progress {
+  height: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.control-slider-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2));
+  pointer-events: none;
+}
+
+/* Color-specific glows for progress */
+.control-slider-progress.color-orange {
+  box-shadow: 0 0 20px rgba(234, 88, 12, 0.4);
+}
+
+.control-slider-progress.color-blue {
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+}
+
+.control-slider-progress.color-amber {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.control-slider-progress.color-cyan {
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+/* Range input enhancement */
+.control-slider-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.control-slider-input:disabled {
+  cursor: not-allowed;
+}
+
+.control-slider-input:not(:disabled):hover {
+  cursor: grab;
+}
+
+.control-slider-input:not(:disabled):active {
+  cursor: grabbing;
+}
+
+.control-slider-input:focus-visible {
+  outline: 2px solid rgba(249, 115, 22, 0.5);
+  outline-offset: 4px;
+  border-radius: 9999px;
+}
+
+/* Thumb styling */
+.control-slider-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.1);
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1;
+}
+
+.control-slider-container:not(.disabled):hover .control-slider-thumb {
+  width: 1.75rem;
+  height: 1.75rem;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(255, 255, 255, 0.15);
+}
+
+.control-slider-input:active ~ .control-slider-thumb {
+  transform: translateY(-50%) scale(1.15);
+}
+
+/* Thumb inner glow */
+.control-slider-thumb-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  opacity: 0.2;
+  filter: blur(4px);
+  transition: all 0.3s ease;
+}
+
+.control-slider-container:not(.disabled):hover .control-slider-thumb-glow {
+  opacity: 0.35;
+  filter: blur(6px);
+}
+
+.control-slider-input:active ~ .control-slider-thumb .control-slider-thumb-glow {
+  opacity: 0.5;
+  filter: blur(8px);
+}
+
+/* Thumb outer glow for different colors */
+.control-slider-thumb.color-orange {
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 0 20px rgba(234, 88, 12, 0.4);
+}
+
+.control-slider-thumb.color-blue {
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 0 20px rgba(37, 99, 235, 0.4);
+}
+
+.control-slider-thumb.color-amber {
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 0 20px rgba(245, 158, 11, 0.4);
+}
+
+.control-slider-thumb.color-cyan {
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(255, 255, 255, 0.1),
+    0 0 20px rgba(6, 182, 212, 0.4);
+}
+
+/* Disabled state styling */
+.control-slider-container.disabled {
+  opacity: 0.5;
+  filter: grayscale(0.3);
+}
+
+.control-slider-container.disabled .control-slider-thumb {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background: #e5e5e5;
+}
+
+.control-slider-container.disabled .control-slider-track {
+  background: #1a1a1a;
+}
+
+/* Progress animation on value change */
+@keyframes progress-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.control-slider-progress.animating {
+  animation: progress-pulse 0.3s ease;
+}
+
+/* Tick marks (optional enhancement) */
+.control-slider-ticks {
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.control-slider-tick {
+  width: 1px;
+  height: 4px;
+  background: rgba(115, 115, 115, 0.3);
+  border-radius: 1px;
+}
+
+/* Smooth transition for all interactive elements */
+.control-slider-container * {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Prevent text selection during drag */
+.control-slider-container:active {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .control-slider-thumb {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .control-slider-track {
+    height: 0.625rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .control-slider-track {
+    border: 1px solid currentColor;
+  }
+  
+  .control-slider-thumb {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .control-slider-container,
+  .control-slider-container * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .control-slider-input {
+    height: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .control-slider-thumb {
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+/* Dark mode refinements (if needed) */
+@media (prefers-color-scheme: dark) {
+  .control-slider-thumb {
+    background: #fafafa;
+  }
+}
+
+/* Loading state (optional) */
+.control-slider-container.loading {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.control-slider-container.loading .control-slider-progress {
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+/* Accessibility: Keyboard focus ring */
+.control-slider-input:focus-visible ~ .control-slider-thumb {
+  box-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.3),
+    0 0 0 3px rgba(249, 115, 22, 0.5),
+    0 0 0 5px rgba(249, 115, 22, 0.2);
+}
+
+/* Value tooltip on hover (optional) */
+.control-slider-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(23, 23, 23, 0.95);
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.control-slider-container:hover .control-slider-tooltip {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-12px);
+}
