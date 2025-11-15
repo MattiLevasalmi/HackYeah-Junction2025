@@ -1,14 +1,16 @@
 import { motion } from 'motion/react';
 import { ChevronLeft, Check } from 'lucide-react';
 import './NextScreen.css';
+import { AISaunaMode } from './AISaunaMode'; // import the AI component
 
 interface NextScreenProps {
   children?: React.ReactNode;
   onBack: () => void;
   selectedUsers: string[];
+  showAIMode?: boolean; // optional flag to display AISaunaMode
 }
 
-export function NextScreen({ onBack, selectedUsers, children }: NextScreenProps) {
+export function NextScreen({ onBack, selectedUsers, children, showAIMode }: NextScreenProps) {
   return (
     <div className="next-screen">
       {/* Header */}

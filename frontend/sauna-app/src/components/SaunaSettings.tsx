@@ -30,9 +30,9 @@ export function SaunaSettings({
   setIsPowerOn
 }: SaunaSettingsProps) {
   const presets = [
-    { name: 'Gentle', temp: 60, time: 20, steam: 30 },
-    { name: 'Classic', temp: 75, time: 30, steam: 40 },
-    { name: 'Intense', temp: 90, time: 45, steam: 60 }
+    { name: 'Mild', temp: 60, time: 20, steam: 30 },
+    { name: 'Cozy', temp: 75, time: 30, steam: 40 },
+    { name: 'Hot', temp: 90, time: 45, steam: 60 }
   ];
 
   const applyPreset = (preset: typeof presets[0]) => {
