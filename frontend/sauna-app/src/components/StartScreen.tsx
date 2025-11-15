@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { UserProfile } from "./UserProfile";
 import "./StartScreen.css";
+import axios from 'axios';
+import type { User } from './UserProfile';
 
 interface StartScreenProps {
-  selectedUsers: number[];
-  setSelectedUsers: (users: number[]) => void;
+  selectedUsers: string[];
+  setSelectedUsers: (users: string[]) => void;
   onNext: () => void;
 }
 
@@ -15,14 +17,11 @@ const subtitles = [
   "Experience Pure Relaxation.",
 ];
 
-const users = [
-  { id: 1, name: "Anna", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" },
-  { id: 2, name: "Mikko", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" },
-  { id: 3, name: "Eeva", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" },
-];
+
 
 export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartScreenProps) {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
+  const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -31,14 +30,21 @@ export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartSc
     return () => clearInterval(interval);
   }, []);
 
-  const toggleUser = (userId: number) => {
-    if (selectedUsers.includes(userId)) {
-      setSelectedUsers(selectedUsers.filter((id) => id !== userId));
-    } else {
-      setSelectedUsers([...selectedUsers, userId]);
-    }
-  };
+  const toggleUser = (userId: string) => {
+  if (selectedUsers.includes(userId)) {
+    setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+  } else {
+    setSelectedUsers([...selectedUsers, userId]);
+  }
+};
 
+
+useEffect(() => {
+  axios
+    .get('http://localhost:3000/api/users')
+    .then(res => setUsers(res.data.users as User[]))
+    .catch(console.error);
+}, []);
   return (
     <div className="StartScreen">
       <div className="bg-glow"></div>
@@ -69,10 +75,10 @@ export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartSc
       <div className="users">
         {users.map((user, index) => (
           <UserProfile
-            key={user.id}
+            key={user.userId}
             user={user}
-            isSelected={selectedUsers.includes(user.id)}
-            onSelect={() => toggleUser(user.id)}
+            isSelected={selectedUsers.includes(user.userId)}
+            onSelect={() => toggleUser(user.userId)}
             delay={index * 0.1}
           />
         ))}

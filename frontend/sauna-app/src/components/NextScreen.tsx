@@ -3,7 +3,7 @@ import { ChevronLeft, Check } from 'lucide-react';
 
 interface NextScreenProps {
   onBack: () => void;
-  selectedUsers: number[];
+  selectedUsers: string[];
 }
 
 export function NextScreen({ onBack, selectedUsers }: NextScreenProps) {

@@ -6,7 +6,7 @@ import { PhoneEmulator } from './components/PhoneEmulator';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<'start' | 'next'>('start');
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const handleNext = () => {
     setCurrentScreen('next');

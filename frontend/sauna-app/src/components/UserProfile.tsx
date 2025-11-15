@@ -1,10 +1,11 @@
 import { motion } from 'motion/react';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 
-interface User {
-  id: number;
+
+export interface User {
+  userId: string;
   name: string;
-  image: string;
+  imagePath: string;
 }
 
 interface UserProfileProps {
@@ -28,7 +29,7 @@ export function UserProfile({ user, isSelected, onSelect, delay }: UserProfilePr
         {/* Glow effect when selected */}
         {isSelected && (
           <motion.div
-            layoutId={`glow-${user.id}`}
+            layoutId={`glow-${user.userId}`}
             className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 to-red-500 blur-xl"
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.6 }}
@@ -46,7 +47,7 @@ export function UserProfile({ user, isSelected, onSelect, delay }: UserProfilePr
           whileTap={{ scale: 0.95 }}
         >
           <ImageWithFallback
-            src={user.image}
+            src={user.imagePath}
             alt={user.name}
             className="w-full h-full object-cover"
           />
