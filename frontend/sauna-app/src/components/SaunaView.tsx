@@ -4,6 +4,7 @@ import { SessionStatus } from "./SessionStatus";
 import { SaunaSettings } from "./SaunaSettings";
 import { Header } from "./Header";
 import "./SaunaView.css";
+import Dictaphone from "./Dictaphone"; 
 
 interface SaunaViewProps {
   simulationId: string;
@@ -25,6 +26,12 @@ export function SaunaView({ simulationId, settings, onEnd, fullWidth }: SaunaVie
   const [steamLevel, setSteamLevel] = useState(settings.targetHumidity);
   const [isPowerOn, setIsPowerOn] = useState(true);
 
+  const getGlowColor = (temperature: number) => {
+  if (temperature < 70) return "yellow";
+  if (temperature < 85) return "orange";
+  return "red";
+};
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-zinc-900 sauna-view-background">
       <Header isPowerOn={isPowerOn} />
@@ -37,9 +44,13 @@ export function SaunaView({ simulationId, settings, onEnd, fullWidth }: SaunaVie
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 sauna-view-grid">
           {/* 3D Model Section */}
           <div className="order-2 lg:order-1 model-section">
-            <ModelViewer isPowerOn={isPowerOn} temperature={temperature} />
-            <SessionStatus isPowerOn={isPowerOn} simulationId={simulationId} />
-          </div>
+          <ModelViewer 
+            isPowerOn={isPowerOn} 
+            temperature={temperature} 
+            glowColor={getGlowColor(temperature)} 
+          />
+          <SessionStatus isPowerOn={isPowerOn} simulationId={simulationId} />
+        </div>
 
           {/* Settings Panel */}
           <div className="order-1 lg:order-2 settings-section">
@@ -58,6 +69,12 @@ export function SaunaView({ simulationId, settings, onEnd, fullWidth }: SaunaVie
             />
           </div>
         </div>
+        <Dictaphone
+          temperature={temperature}
+          setTemperature={setTemperature}
+          humidity={steamLevel}
+          setHumidity={setSteamLevel}
+        />
       </main>
     </div>
   );
