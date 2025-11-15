@@ -1,0 +1,48 @@
+{
+  "targets": [
+    "recommended_temp",
+    "recommended_humidity",
+    "recommended_duration",
+    "recommended_next_session_days",
+    "recommended_breaks",
+    "predicted_stress_level_after_sauna"
+  ],
+  "statistics": {
+    "recommended_temp": {
+      "mean": 76.45748901367188,
+      "std": 9.052851676940918,
+      "min": 50.442718505859375,
+      "max": 99.17898559570312
+    },
+    "recommended_humidity": {
+      "mean": 26.7634334564209,
+      "std": 8.874504089355469,
+      "min": 10.003900527954102,
+      "max": 54.59761428833008
+    },
+    "recommended_duration": {
+      "mean": 21.5153751373291,
+      "std": 6.237878322601318,
+      "min": 9.65970230102539,
+      "max": 39.36519241333008
+    },
+    "recommended_next_session_days": {
+      "mean": 4.427601337432861,
+      "std": 0.9395430088043213,
+      "min": 1.0,
+      "max": 7.0
+    },
+    "recommended_breaks": {
+      "mean": 1.6754000186920166,
+      "std": 0.7810472846031189,
+      "min": 1.0,
+      "max": 3.0
+    },
+    "predicted_stress_level_after_sauna": {
+      "mean": 8.49591064453125,
+      "std": 0.5917422771453857,
+      "min": 6.637795925140381,
+      "max": 10.0
+    }
+  }
+}
