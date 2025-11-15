@@ -9,6 +9,15 @@ export interface User {
   gender: string;
 }
 
+export interface Session {
+  _id?: string;
+  userId: string;
+  averageTemperature: number;
+  averageHumidity: number;
+  duration: number;
+  createdAt?: Date;
+}
+
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/?appName=${process.env.DB_CLUSTER}`;
 
 const client = new MongoClient(uri, {
@@ -21,6 +30,7 @@ const client = new MongoClient(uri, {
 
 let db: Db;
 let usersCollection: Collection<User>;
+let sessionsCollection: Collection<Session>;
 
 export const connectDB = async () => {
   try {
@@ -39,6 +49,7 @@ export const connectDB = async () => {
     await client.connect();
     db = client.db(process.env.DB_NAME);
     usersCollection = db.collection<User>("Users");
+    sessionsCollection = db.collection<Session>("Sessions");
     console.log("✓ Connected to MongoDB");
   } catch (error) {
     console.error("✗ Failed to connect to MongoDB:", error);
@@ -48,6 +59,7 @@ export const connectDB = async () => {
 
 export const getDB = () => db;
 export const getUsersCollection = () => usersCollection;
+export const getSessionsCollection = () => sessionsCollection;
 
 export const disconnectDB = async () => {
   try {

@@ -14,6 +14,7 @@ interface ActiveSimulation {
   targetTemperature: number;
   targetHumidity: number;
   targetDurationMinutes: number;
+  userIds: string[];
 }
 
 const SIMULATED_TIME_MULTIPLIER = 30; // 1 real second = 30 simulated seconds
@@ -25,12 +26,14 @@ interface SimulationInput {
   targetTemperature?: number;
   targetHumidity?: number;
   duration?: number;
+  userIds?: string[];
 }
 
 export const startSimulation = (input: SimulationInput = {}): string => {
   const targetTemperature = input.targetTemperature || 80; // Default to 80°C
   const targetHumidity = input.targetHumidity || 60; // Default to 60%
   const durationMinutes = input.duration || 30; // Default to 30 minutes
+  const userIds = input.userIds || []; // User IDs for session tracking
   const simulationId = `sim_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   const startTime = Date.now();
 
@@ -43,6 +46,7 @@ export const startSimulation = (input: SimulationInput = {}): string => {
     targetTemperature,
     targetHumidity,
     targetDurationMinutes: durationMinutes,
+    userIds,
   };
 
   // Initial measurement at start
@@ -125,16 +129,70 @@ const endSimulationInternal = (simulationId: string) => {
   }
 };
 
+const calculateAverages = (data: SimulationData[]): { avgTemp: number; avgHumidity: number } => {
+  if (data.length === 0) return { avgTemp: 0, avgHumidity: 0 };
+  
+  const sumTemp = data.reduce((acc, d) => acc + d.temperature, 0);
+  const sumHumidity = data.reduce((acc, d) => acc + d.humidity, 0);
+  
+  return {
+    avgTemp: Math.round((sumTemp / data.length) * 10) / 10,
+    avgHumidity: Math.round((sumHumidity / data.length) * 10) / 10,
+  };
+};
+
+const saveSessionToDb = async (
+  userIds: string[],
+  averageTemperature: number,
+  averageHumidity: number,
+  duration: number
+): Promise<void> => {
+  try {
+    const { getSessionsCollection } = await import("../db/client");
+    const sessionsCol = getSessionsCollection();
+    
+    // Save a session record for each userId
+    for (const userId of userIds) {
+      await sessionsCol.insertOne({
+        userId,
+        averageTemperature,
+        averageHumidity,
+        duration,
+        createdAt: new Date(),
+      } as any);
+    }
+  } catch (error) {
+    console.error("✗ Failed to save session to database:", error);
+  }
+};
+
 export const endSimulation = (simulationId: string) => {
   endSimulationInternal(simulationId);
   const simulation = activeSimulations.get(simulationId);
-  return simulation
-    ? {
-        simulationId,
-        totalMeasurements: simulation.data.length,
-        data: simulation.data,
-      }
-    : null;
+  
+  if (!simulation) {
+    return null;
+  }
+
+  // Calculate averages and duration
+  const { avgTemp, avgHumidity } = calculateAverages(simulation.data);
+  const durationSeconds = simulation.targetDurationMinutes * 60;
+
+  // Save session to database for each user
+  if (simulation.userIds.length > 0) {
+    saveSessionToDb(simulation.userIds, avgTemp, avgHumidity, durationSeconds).catch((err) => {
+      console.error("Failed to save session:", err);
+    });
+  }
+
+  return {
+    simulationId,
+    totalMeasurements: simulation.data.length,
+    averageTemperature: avgTemp,
+    averageHumidity: avgHumidity,
+    duration: durationSeconds,
+    sessionsSaved: simulation.userIds,
+  };
 };
 
 export const updateSimulation = (
