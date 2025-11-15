@@ -1,45 +1,17 @@
+import { ObjectId } from "mongodb";
 import { getUsersCollection, User } from "../db/client";
 
-type PreferenceKey = "temperature" | "humidity" | "sessionDuration" | "notifications";
-
-// ----------------------------------------
-// GET ONE USER
-// ----------------------------------------
-export const getOneUser = async (userId: string): Promise<{
-  email?: string;
-  firstName?: string;
-  lastName?: string;
-  imagePath?: string;
-  age?: number;
-  sex?: string;
-  experienceLevel?: string;
-}> => {
-  const col = getUsersCollection();
-  const doc = await col.findOne({ _id: userId });  // <-- FIXED
-  return {
-    email: doc?.email,
-    firstName: doc?.firstName,
-    lastName: doc?.lastName,
-    imagePath: doc?.imagePath,
-    age: doc?.age,
-    sex: doc?.sex,
-    experienceLevel: doc?.experienceLevel,
-  };
-};
-
-// ----------------------------------------
-// GET ALL USERS
-// ----------------------------------------
-export const getAllUsers = async (): Promise<
-  { userId: string; name: string; imagePath: string }[]
-> => {
+export const getAllUsers = async (): Promise<{
+  userId: string;
+  name: string;
+  imagePath: string;
+}[]> => {
   const col = getUsersCollection();
   const docs = await col
     .find(
       {},
       {
         projection: {
-          _id: 1,
           firstName: 1,
           lastName: 1,
           imagePath: 1,
@@ -49,25 +21,23 @@ export const getAllUsers = async (): Promise<
     .toArray();
 
   return docs.map((u) => ({
-    userId: u._id, // <-- already a string
-    name: `${u.firstName} ${u.lastName}`,
-    imagePath: u.imagePath ?? "",
+    userId: u._id.toString(),
+    name: u.firstName + ' ' + u.lastName,
+    imagePath: u.imagePath,
   }));
 };
 
-// ----------------------------------------
-// CREATE NEW USER (STRING ID)
-// ----------------------------------------
+
 export const createNewUser = async (
   firstName: string,
   lastName: string,
   imagePath: string
 ): Promise<User> => {
   const col = getUsersCollection();
+
   const now = new Date().toISOString();
 
-  const newUser: User = {
-    _id: crypto.randomUUID(), // <-- STRING FIX
+  const newUser = {
     firstName,
     lastName,
     email: "",
@@ -85,13 +55,14 @@ export const createNewUser = async (
     updatedAt: now,
   };
 
-  await col.insertOne(newUser);
-  return newUser;
+  const res = await col.insertOne(newUser);
+
+  return {
+    ...newUser,
+    userId: res.insertedId.toString(),
+  } as User;
 };
 
-// ----------------------------------------
-// UPDATE USER (string ID)
-// ----------------------------------------
 export const updateUser = async (
   userId: string,
   updates: {
@@ -110,8 +81,9 @@ export const updateUser = async (
   }
 ): Promise<User | null> => {
   const col = getUsersCollection();
+  const _id = new ObjectId(userId);
 
-  const set: Record<string, any> = {};
+  const set: any = {};
 
   if (updates.firstName !== undefined) set.firstName = updates.firstName;
   if (updates.lastName !== undefined) set.lastName = updates.lastName;
@@ -120,10 +92,10 @@ export const updateUser = async (
   if (updates.sex !== undefined) set.sex = updates.sex;
   if (updates.experienceLevel !== undefined) set.experienceLevel = updates.experienceLevel;
 
-  // Nested preferences
+  // Nested preferences updates
   if (updates.preferences) {
-    for (const key of Object.keys(updates.preferences) as PreferenceKey[]) {
-      set[`preferences.${key}`] = updates.preferences[key];
+    for (const key of Object.keys(updates.preferences)) {
+      set[`preferences.${key}`] = (updates.preferences as any)[key];
     }
   }
 
@@ -131,11 +103,15 @@ export const updateUser = async (
 
   if (Object.keys(set).length === 0) return null;
 
-  // FIXED: use string ID
-  const upd = await col.updateOne({ _id: userId }, { $set: set });
+  const upd = await col.updateOne({ _id }, { $set: set });
 
   if (upd.matchedCount === 0) return null;
 
-  const updated = await col.findOne({ _id: userId });
-  return updated as User | null;
+  const updated = await col.findOne({ _id });
+  if (!updated) return null;
+
+  return {
+    ...updated,
+    userId: updated._id.toString(),
+  } as User;
 };
