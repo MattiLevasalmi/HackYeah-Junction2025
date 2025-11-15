@@ -9,6 +9,7 @@ interface StartScreenProps {
   selectedUsers: string[];
   setSelectedUsers: (users: string[]) => void;
   onNext: () => void;
+  onProfile: () => void;
 }
 
 const subtitles = [
@@ -17,7 +18,7 @@ const subtitles = [
   "Experience Pure Relaxation.",
 ];
 
-export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartScreenProps) {
+export function StartScreen({ selectedUsers, setSelectedUsers, onNext, onProfile }: StartScreenProps) {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
 
@@ -121,17 +122,31 @@ export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartSc
         </motion.div>
       )}
 
-      <motion.button
-        className="next-button"
-        onClick={onNext}
-        disabled={selectedUsers.length === 0}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-      >
-        <div className="glow"></div>
-        <span>Next</span>
-      </motion.button>
+      <div className="button-container">
+        <motion.button
+          className="profile-button"
+          onClick={onProfile}
+          disabled={selectedUsers.length !== 1}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div className="glow"></div>
+          <span>See Profile</span>
+        </motion.button>
+
+        <motion.button
+          className="next-button"
+          onClick={onNext}
+          disabled={selectedUsers.length === 0}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div className="glow"></div>
+          <span>Next</span>
+        </motion.button>
+      </div>
     </div>
   );
 }

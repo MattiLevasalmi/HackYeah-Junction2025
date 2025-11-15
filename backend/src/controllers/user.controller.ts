@@ -1,5 +1,17 @@
 import { Request, Response } from "express";
-import { getAllUsers, createNewUser, updateUser } from "../services/user.service";
+import { getAllUsers, createNewUser, updateUser, getOneUser } from "../services/user.service";
+
+export const getUser = async (req: Request, res: Response) => {
+  const {userId} = req.params;
+  try {
+    const user = await getOneUser(userId);
+    res.json({ user });
+  } catch (error) {
+    res.status(500).json({
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+}
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
