@@ -1,0 +1,100 @@
+/* Header.css */
+
+/* Header container */
+.header {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.5); /* border-neutral-800/50 */
+  background-color: rgba(20, 20, 20, 0.3); /* bg-neutral-950/50 */
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* Inner container */
+.header__inner {
+  max-width: 1200px; /* container */
+  margin: 0 auto;
+  padding: 1rem 1rem; /* px-4 py-4 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 1024px) {
+  .header__inner {
+    padding-top: 1.5rem; /* lg:py-6 */
+    padding-bottom: 1.5rem;
+  }
+}
+
+/* Logo + title */
+.header__logo-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* gap-3 */
+}
+
+.header__logo {
+  position: relative;
+}
+
+/* Flame icon */
+.header__flame {
+  width: 2rem; /* w-8 */
+  height: 2rem; /* h-8 */
+  color: #fb923c; /* text-orange-500 */
+}
+
+/* Animated overlay flame when power is on */
+.header__flame-overlay {
+  position: absolute;
+  inset: 0;
+  color: #f97316; /* text-orange-400 */
+}
+
+/* Title & subtitle */
+.header__title {
+  color: #ffffff;
+  font-size: 1.25rem; /* approx text-xl */
+  font-weight: 500;
+  margin: 0;
+}
+
+.header__subtitle {
+  color: #9ca3af; /* text-neutral-500 */
+  font-size: 0.875rem; /* approx text-sm */
+  margin: 0;
+}
+
+/* Status indicator */
+.header__status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+}
+
+.header__status-dot {
+  width: 0.5rem; /* w-2 */
+  height: 0.5rem; /* h-2 */
+  border-radius: 9999px;
+}
+
+.header__status-text {
+  color: #9ca3af; /* text-neutral-400 */
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .header__status-text {
+    display: inline;
+  }
+}
+
+/* Power indicator colors */
+.header__status-dot.active {
+  background-color: #22c55e; /* bg-green-500 */
+}
+
+.header__status-dot.inactive {
+  background-color: #4b5563; /* bg-neutral-600 */
+}
