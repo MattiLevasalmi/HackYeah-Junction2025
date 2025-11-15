@@ -21,7 +21,7 @@ export class SaunaSensorService {
   private geminiApiKey: string;
 
   constructor() {
-    this.dataFilePath = path.join(__dirname, '../../data/sauna-sensor-data.json');
+    this.dataFilePath = path.join(__dirname, '../data/sauna-sensor-data.json');
     this.elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY || '';
     this.geminiApiKey = process.env.GEMINI_API_KEY || '';
   }
@@ -52,6 +52,7 @@ export class SaunaSensorService {
 
   // Update sensor data
   async updateSensorData(updates: Partial<SensorData>): Promise<SensorData> {
+    try {
     const currentData = await this.getSensorData();
     const updatedData: SensorData = {
       ...currentData,
@@ -60,6 +61,10 @@ export class SaunaSensorService {
     };
     await fs.writeFile(this.dataFilePath, JSON.stringify(updatedData, null, 2));
     return updatedData;
+    } catch (error) {
+      console.error('Error updating sensor data:', error);
+      throw new Error('Failed to update sensor data');
+    }
   }
 
   // Transcribe audio using ElevenLabs or OpenAI Whisper

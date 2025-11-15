@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { ModelViewer } from "./ModelViewer";
 import { SaunaSettings } from "./SaunaSettings";
+import { SaunaVoiceButton } from "./SaunaVoiceButton"; // <-- import it here
 import { Header } from "./Header";
 import "./SaunaView.css";
 
 interface SaunaViewProps {
-  fullWidth?: boolean; // New prop to allow full width
+  fullWidth?: boolean;
 }
 
 export function SaunaView({ fullWidth }: SaunaViewProps) {
@@ -31,7 +32,7 @@ export function SaunaView({ fullWidth }: SaunaViewProps) {
           </div>
 
           {/* Settings Panel */}
-          <div className="order-1 lg:order-2 settings-section">
+          <div className="order-1 lg:order-2 settings-section flex flex-col gap-4">
             <SaunaSettings
               temperature={temperature}
               setTemperature={setTemperature}
@@ -44,6 +45,9 @@ export function SaunaView({ fullWidth }: SaunaViewProps) {
               isPowerOn={isPowerOn}
               setIsPowerOn={setIsPowerOn}
             />
+
+            {/* Voice Button Section */}
+            <SaunaVoiceButton /> {/* <-- add it here */}
           </div>
         </div>
       </main>
