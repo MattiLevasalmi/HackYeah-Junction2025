@@ -22,11 +22,10 @@ export function UserProfile({ user, isSelected, onSelect, delay }: UserProfilePr
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.5, delay }}
       onClick={onSelect}
-      className="flex flex-col items-center gap-3 group relative"
+      className="user-profile flex flex-col items-center gap-3 group relative"
     >
       {/* Avatar container */}
-      <div className="relative">
-        {/* Glow effect when selected */}
+      <div className="relative w-full flex justify-center">
         {isSelected && (
           <motion.div
             layoutId={`glow-${user.userId}`}
@@ -37,23 +36,17 @@ export function UserProfile({ user, isSelected, onSelect, delay }: UserProfilePr
           ></motion.div>
         )}
 
-        {/* Avatar image */}
         <motion.div
-          className="relative w-20 h-20 rounded-full overflow-hidden border-4 transition-all duration-300"
-          style={{
-            borderColor: isSelected ? '#ea580c' : 'transparent'
-          }}
+          className="relative w-24 h-24 rounded-full overflow-hidden border-4 transition-all duration-300"
+          style={{ borderColor: isSelected ? '#ea580c' : 'transparent' }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          <ImageWithFallback
-            src={user.imagePath} 
+          <img
+            src={user.imagePath}
             alt={user.name}
             className="w-full h-full object-cover"
           />
-          
-          {/* Overlay gradient on hover */}
-          <div className="absolute inset-0 bg-gradient-to-t from-orange-600/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </motion.div>
 
         {/* Selection indicator */}
@@ -71,14 +64,10 @@ export function UserProfile({ user, isSelected, onSelect, delay }: UserProfilePr
       </div>
 
       {/* User name */}
-      <motion.span
-        className="transition-colors duration-300"
-        style={{
-          color: isSelected ? '#f97316' : '#a3a3a3'
-        }}
-      >
+      <span className="user-name" style={{ color: isSelected ? '#f97316' : '#a3a3a3' }}>
         {user.name}
-      </motion.span>
+      </span>
     </motion.button>
   );
 }
+

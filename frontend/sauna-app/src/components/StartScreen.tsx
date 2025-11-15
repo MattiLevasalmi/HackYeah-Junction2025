@@ -17,8 +17,6 @@ const subtitles = [
   "Experience Pure Relaxation.",
 ];
 
-
-
 export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartScreenProps) {
   const [currentSubtitleIndex, setCurrentSubtitleIndex] = useState(0);
   const [users, setUsers] = useState<User[]>([]);
@@ -31,40 +29,48 @@ export function StartScreen({ selectedUsers, setSelectedUsers, onNext }: StartSc
   }, []);
 
   const toggleUser = (userId: string) => {
-  if (selectedUsers.includes(userId)) {
-    setSelectedUsers(selectedUsers.filter((id) => id !== userId));
-  } else {
-    setSelectedUsers([...selectedUsers, userId]);
-  }
-};
+    if (selectedUsers.includes(userId)) {
+      setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+    } else {
+      setSelectedUsers([...selectedUsers, userId]);
+    }
+  };
 
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/users')
+      .then(res => {
+        const usersWithLeadingSlash = res.data.users.map((u: User) => ({
+          ...u,
+          imagePath: `/${u.imagePath}`
+        }));
+        setUsers(usersWithLeadingSlash);
+      })
+      .catch(console.error);
+  }, []);
 
-useEffect(() => {
-  axios.get('http://localhost:3000/api/users')
-    .then(res => {
-      const usersWithLeadingSlash = res.data.users.map((u: User) => ({
-        ...u,
-        imagePath: `/${u.imagePath}` // prepend slash once
-      }));
-      setUsers(usersWithLeadingSlash);
-      console.log(res.data.users)
-    })
-    .catch(console.error);
-}, []);
+  // Only show the first 4 users
+  const visibleUsers = users.slice(0, 4);
 
   return (
     <div className="StartScreen">
       <div className="bg-glow"></div>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        My Harvia
-      </motion.h1>
+      <motion.img
+      src="/images/harvia.jpg"
+      alt="My Harvia"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      style={{
+        width: '400px',       // adjust size as needed
+        height: 'auto',
+        marginTop: '80px',
+        borderRadius: '10px', // optional, rounded corners
+        boxShadow: '0 0 30px #FF7F50, 0 0 60px #FF6347', // optional glow
+      }}
+    />
 
-      <div className="h-12">
+      <div className="h-12" style={{marginTop: '30px'}}>
         <AnimatePresence mode="wait">
           <motion.p
             key={currentSubtitleIndex}
@@ -79,19 +85,41 @@ useEffect(() => {
         </AnimatePresence>
       </div>
 
-      <div className="users">
-        {users.map((user, index) => (
-          <UserProfile
-            key={user.userId}
-            user={user}
-            isSelected={selectedUsers.includes(user.userId)}
-            onSelect={() => toggleUser(user.userId)}
-            delay={index * 0.1}
-          />
-        ))}
+      <div className="users-wrapper">
+        <div className="users">
+          {visibleUsers.map((user, index) => (
+            <UserProfile
+              key={user.userId}
+              user={user}
+              isSelected={selectedUsers.includes(user.userId)}
+              onSelect={() => toggleUser(user.userId)}
+              delay={index * 0.1}
+            />
+          ))}
+        </div>
       </div>
 
+      {selectedUsers.length === 0 && (
+        <motion.p
+          className="select-warning"
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          Please select at least one user to continue
+        </motion.p>
+      )}
 
+      {selectedUsers.length > 0 && (
+        <motion.div
+          className="selected-count"
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          {selectedUsers.length} user{selectedUsers.length > 1 ? 's' : ''} selected
+        </motion.div>
+      )}
 
       <motion.button
         className="next-button"

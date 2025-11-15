@@ -4,7 +4,9 @@ import './Header.css';
 
 interface HeaderProps {
   isPowerOn: boolean;
+  onBackToStart?: () => void; // callback for back button
 }
+
 
 export function Header({ isPowerOn }: HeaderProps) {
   return (

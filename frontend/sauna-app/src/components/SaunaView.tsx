@@ -4,7 +4,11 @@ import { SaunaSettings } from "./SaunaSettings";
 import { Header } from "./Header";
 import "./SaunaView.css";
 
-export function SaunaView() {
+interface SaunaViewProps {
+  fullWidth?: boolean; // New prop to allow full width
+}
+
+export function SaunaView({ fullWidth }: SaunaViewProps) {
   const [temperature, setTemperature] = useState(75);
   const [lighting, setLighting] = useState(60);
   const [timer, setTimer] = useState(30);
@@ -15,7 +19,11 @@ export function SaunaView() {
     <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-zinc-900 sauna-view-background">
       <Header isPowerOn={isPowerOn} />
 
-      <main className="container mx-auto px-4 py-6 lg:py-8 sauna-view-container sauna-view-main">
+      <main
+        className={`container mx-auto px-4 py-6 lg:py-8 sauna-view-container sauna-view-main ${
+          fullWidth ? "max-w-full mx-0" : ""
+        }`}
+      >
         <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 sauna-view-grid">
           {/* 3D Model Section */}
           <div className="order-2 lg:order-1 model-section">
