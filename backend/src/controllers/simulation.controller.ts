@@ -3,12 +3,13 @@ import * as simulationService from "../services/simulation.service";
 
 export const startSimulation = (req: Request, res: Response) => {
   try {
-    const { targetTemperature, targetHumidity, duration } = req.body;
+    const { targetTemperature, targetHumidity, duration, userIds } = req.body;
 
     const simulationId = simulationService.startSimulation({
       targetTemperature,
       targetHumidity,
       duration,
+      userIds,
     });
 
     res.json({
@@ -17,6 +18,7 @@ export const startSimulation = (req: Request, res: Response) => {
       targetTemperature: targetTemperature || 80,
       targetHumidity: targetHumidity || 60,
       duration: duration || 30,
+      userIds: userIds || [],
       message: `Simulation started. Each real second equals 30 simulated seconds.`,
     });
   } catch (error) {
