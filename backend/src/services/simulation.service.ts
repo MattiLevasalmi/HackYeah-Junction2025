@@ -70,14 +70,17 @@ export const startSimulation = (input: SimulationInput = {}): string => {
       return;
     }
 
-    // Simulate gradual temperature and humidity increase from 40°C/30% to target values
-    const progressRatio = elapsedSimulatedSeconds / (5 * 60);
+    const heatUpDuration = 5 * 60; // 5 minutes in simulated seconds
+    const progressRatio = Math.min(1, elapsedSimulatedSeconds / heatUpDuration);
+
+    // Temperature
     const baseTemperature = 40 + progressRatio * (targetTemperature - 40);
-    const temperatureVariation = (Math.random() - 0.5) * 2;
+    const temperatureVariation = (Math.random() - 0.5) * (progressRatio < 1 ? 2 : 1);
     const temperature = Math.round((baseTemperature + temperatureVariation) * 10) / 10;
 
+    // Humidity
     const baseHumidity = 30 + progressRatio * (targetHumidity - 30);
-    const humidityVariation = (Math.random() - 0.5) * 3;
+    const humidityVariation = (Math.random() - 0.5) * (progressRatio < 1 ? 3 : 1.5);
     const humidity = Math.max(0, Math.min(100, Math.round((baseHumidity + humidityVariation) * 10) / 10));
 
     const measurement: SimulationData = {

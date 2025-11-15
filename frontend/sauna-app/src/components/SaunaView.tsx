@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ModelViewer } from "./ModelViewer";
+import { SessionStatus } from "./SessionStatus";
 import { SaunaSettings } from "./SaunaSettings";
 import { Header } from "./Header";
 import "./SaunaView.css";
@@ -14,6 +15,7 @@ export function SaunaView({ fullWidth }: SaunaViewProps) {
   const [timer, setTimer] = useState(30);
   const [steamLevel, setSteamLevel] = useState(40);
   const [isPowerOn, setIsPowerOn] = useState(false);
+  const [simulationId, setSimulationId] = useState<string>('');
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-neutral-950 via-neutral-900 to-zinc-900 sauna-view-background">
@@ -28,6 +30,7 @@ export function SaunaView({ fullWidth }: SaunaViewProps) {
           {/* 3D Model Section */}
           <div className="order-2 lg:order-1 model-section">
             <ModelViewer isPowerOn={isPowerOn} temperature={temperature} />
+            <SessionStatus isPowerOn={isPowerOn} simulationId={simulationId} />
           </div>
 
           {/* Settings Panel */}
@@ -43,6 +46,7 @@ export function SaunaView({ fullWidth }: SaunaViewProps) {
               setSteamLevel={setSteamLevel}
               isPowerOn={isPowerOn}
               setIsPowerOn={setIsPowerOn}
+              setSimulationId={setSimulationId}
             />
           </div>
         </div>

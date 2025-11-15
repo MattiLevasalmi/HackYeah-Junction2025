@@ -15,6 +15,7 @@ interface SaunaSettingsProps {
   setSteamLevel: (value: number) => void;
   isPowerOn: boolean;
   setIsPowerOn: (value: boolean) => void;
+  setSimulationId: (id: string) => void;
 }
 
 export function SaunaSettings({
@@ -28,7 +29,32 @@ export function SaunaSettings({
   setSteamLevel,
   isPowerOn,
   setIsPowerOn
+  , setSimulationId
 }: SaunaSettingsProps) {
+  // lazy import axios to keep bundle small; axios should be installed in the project
+  // we will call the backend to start the simulation and save simulationId
+  const startSimulation = async (preset: typeof presets[0]) => {
+    try {
+      const axios = (await import('axios')).default;
+      const body = {
+        targetTemperature: preset.temp,
+        targetHumidity: preset.steam,
+        duration: preset.time,
+      };
+
+      const resp = await axios.post('http://localhost:3000/api/simulation/start', body);
+      if (resp?.data?.status === 'Simulation started') {
+        const simId = resp.data.simulationId as string | undefined;
+        console.log(simId);
+        if (simId) setSimulationId(simId);
+        setIsPowerOn(true);
+      } else {
+        console.error('Failed to start simulation', resp?.data);
+      }
+    } catch (err) {
+      console.error('Error starting simulation', err);
+    }
+  };
   const presets = [
     { name: 'Mild', temp: 60, time: 20, steam: 30 },
     { name: 'Cozy', temp: 75, time: 30, steam: 40 },
@@ -39,7 +65,8 @@ export function SaunaSettings({
     setTemperature(preset.temp);
     setTimer(preset.time);
     setSteamLevel(preset.steam);
-    setIsPowerOn(true);
+    // call backend to start a simulation; after success power will be set on
+    startSimulation(preset);
   };
 
   return (
