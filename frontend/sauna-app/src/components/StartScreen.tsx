@@ -47,6 +47,7 @@ useEffect(() => {
         imagePath: `/${u.imagePath}` // prepend slash once
       }));
       setUsers(usersWithLeadingSlash);
+      console.log(res.data.users)
     })
     .catch(console.error);
 }, []);

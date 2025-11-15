@@ -1,0 +1,324 @@
+/* AISaunaMode.css
+   Frosted glass + glow theme, fog, droplets, pulsating circle carousel
+*/
+
+/* ---------- base / layout ---------- */
+.ai-container {
+  height: 100%;
+  max-height: 100%;
+  overflow: hidden; 
+  background: radial-gradient(1200px 600px at 10% 15%, rgba(30,30,40,0.45), transparent 8%),
+              radial-gradient(900px 400px at 90% 85%, rgba(10,12,18,0.45), transparent 8%),
+              #05060a; /* deep base */
+  position: relative;
+  color: #eef2f7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* thin noise + glass sheen overlay */
+.ai-bg-overlay {
+    height: 100%;
+  max-height: 100%;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* main frosted glass panel */
+.ai-panel {
+  position: relative;
+  z-index: 10;
+  width: min(880px, 94%);
+  max-width: 920px;
+  padding: 40px;
+  border-radius: 18px;
+  backdrop-filter: blur(12px) saturate(110%);
+  -webkit-backdrop-filter: blur(12px) saturate(110%);
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Title */
+.ai-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #e6eef8;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.2px;
+}
+
+/* ---------- carousel layout ---------- */
+.ai-carousel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* arrow buttons */
+.ai-arrow {
+  appearance: none;
+  border: none;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+  border-radius: 999px;
+  padding: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms;
+  box-shadow: 0 6px 18px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  width: 42px;
+  height: 42px;
+  z-index: 40;
+  margin-top: -10px; /* nudges it closer to center */
+
+}
+.ai-arrow:hover { transform: translateY(-3px) scale(1.02); }
+.ai-arrow:active { transform: translateY(0); }
+
+.ai-arrow-icon { width: 20px; height: 20px; color: #e9f1fb; opacity: 0.95; }
+
+/* center area for circle */
+.ai-circle-wrap {
+  width: 340px;
+  height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* ---------- glowing mode circle ---------- */
+.ai-mode-circle {
+  width: 250px;
+  height: 250px;
+  border-radius: 999px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  transform-origin: center;
+  padding: 10px;
+}
+
+/* inner soft frosted disc */
+.ai-circle-inner {
+  position: absolute;
+  inset: 22px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  filter: blur(18px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* mode content */
+.ai-mode-content {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  padding: 10px;
+}
+
+/* label and subtitle */
+.ai-mode-label {
+  font-size: 25px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.02em;
+  text-shadow: 0 6px 30px rgba(0,0,0,0.6);
+}
+.ai-mode-sub {
+  font-size: 15px;
+  color: rgba(230,240,255,0.8);
+  opacity: 0.85;
+}
+
+/* glow ring (animated pulse) */
+.ai-glow-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 999px;
+  z-index: 1;
+  filter: blur(18px);
+  pointer-events: none;
+  animation: ringPulse 2.6s infinite;
+  opacity: 0.9;
+}
+
+/* icon for AI mode */
+.ai-icon-wrap { display: flex; align-items: center; justify-content: center; }
+.ai-icon { width: 64px; height: 64px; color: white; filter: drop-shadow(0 8px 30px rgba(0,0,0,0.6)); }
+
+/* ---------- per-mode color themes (gradients + glow) ---------- */
+.mode-mild {
+  background: linear-gradient(135deg, #ffe28a 0%, #ffcc4d 100%);
+  box-shadow: 0 10px 60px rgba(255, 200, 60, 0.22), 0 2px 10px rgba(0,0,0,0.5) inset;
+}
+.mode-mild .ai-glow-ring {
+  box-shadow: 0 0 80px rgba(255, 210, 90, 0.32);
+}
+
+.mode-cozy {
+  background: linear-gradient(135deg, #ffb16b 0%, #ff7a2e 100%);
+  box-shadow: 0 12px 70px rgba(255, 120, 40, 0.20), inset 0 2px 12px rgba(0,0,0,0.35);
+}
+.mode-cozy .ai-glow-ring {
+  box-shadow: 0 0 90px rgba(255, 110, 40, 0.30);
+}
+
+.mode-hot {
+  background: linear-gradient(135deg, #ff6b6b 0%, #b30000 100%);
+  box-shadow: 0 14px 90px rgba(255, 60, 60, 0.28), inset 0 2px 14px rgba(0,0,0,0.45);
+}
+.mode-hot .ai-glow-ring {
+  box-shadow: 0 0 110px rgba(255, 40, 40, 0.34);
+}
+
+.mode-ai {
+  background: linear-gradient(135deg, rgba(38,224,255,0.95) 0%, rgba(0,102,255,0.95) 100%);
+  box-shadow: 0 14px 110px rgba(0,160,255,0.26), inset 0 2px 14px rgba(0,0,0,0.35);
+}
+.mode-ai .ai-glow-ring {
+  box-shadow: 0 0 120px rgba(0,170,255,0.32);
+}
+
+/* ---------- indicators + confirm ---------- */
+.ai-controls {
+  width: 100%;
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* little dots */
+.ai-indicators {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.ai-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.04);
+  transition: transform 180ms, background 180ms, box-shadow 180ms;
+  cursor: pointer;
+}
+.ai-dot.active {
+  transform: scale(1.25);
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.45), 0 0 14px rgba(255,255,255,0.08);
+}
+
+/* confirm button */
+.ai-action-row { display: flex; gap: 12px; align-items: center; }
+.ai-confirm {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #eef6ff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms;
+}
+.ai-confirm:hover { transform: translateY(-3px); background: rgba(255,255,255,0.08); }
+
+/* ---------- fog (animated soft clouds) ---------- */
+.ai-fog-layer {
+  position: absolute;
+  left: -10%;
+  top: -10%;
+  width: 120%;
+  height: 120%;
+  pointer-events: none;
+  z-index: 3;
+  background-image:
+    radial-gradient(60% 20% at 20% 20%, rgba(255,255,255,0.03), transparent 20%),
+    radial-gradient(70% 24% at 80% 70%, rgba(255,255,255,0.02), transparent 20%);
+  opacity: 0.9;
+  mix-blend-mode: screen;
+  animation: drift 18s linear infinite;
+  filter: blur(28px);
+}
+
+/* ----------- droplets animation ----------- */
+.ai-droplets {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* small drops are absolutely positioned spans (we use different animation delays) */
+.ai-droplets .drop {
+  position: absolute;
+  width: 6px;
+  height: 12px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.25));
+  opacity: 0.06;
+  transform: translateY(-10px) scale(0.9);
+  animation: dropLoop 6s linear infinite;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+}
+
+/* different positions & animation timings */
+.ai-droplets .d1 { left: 18%; top: 6%; animation-delay: 0s; animation-duration: 7.5s; opacity: 0.06; }
+.ai-droplets .d2 { left: 38%; top: 8%; animation-delay: 1.4s; animation-duration: 8.2s; opacity: 0.05; }
+.ai-droplets .d3 { left: 58%; top: 5%; animation-delay: 2.3s; animation-duration: 7.8s; opacity: 0.08; }
+.ai-droplets .d4 { left: 72%; top: 10%; animation-delay: 3.1s; animation-duration: 9s; opacity: 0.04; }
+.ai-droplets .d5 { left: 86%; top: 12%; animation-delay: 4.6s; animation-duration: 8.6s; opacity: 0.05; }
+
+@keyframes dropLoop {
+  0% { transform: translateY(-20px) scale(0.95); opacity: 0.06; }
+  20% { opacity: 0.12; transform: translateY(20px) scale(1); }
+  60% { transform: translateY(70px) scale(1.02); opacity: 0.06; }
+  100% { transform: translateY(180px) scale(1.08); opacity: 0; }
+}
+
+/* fog drift */
+@keyframes drift {
+  0% { transform: translateX(-6%) translateY(0) rotate(0deg); opacity: 0.85; }
+  50% { transform: translateX(6%) translateY(6%) rotate(0.5deg); opacity: 0.95; }
+  100% { transform: translateX(-6%) translateY(0) rotate(0deg); opacity: 0.85; }
+}
+
+/* pulsating ring */
+@keyframes ringPulse {
+  0% { transform: scale(0.98); opacity: 0.5; filter: blur(14px); }
+  50% { transform: scale(1.06); opacity: 0.95; filter: blur(20px); }
+  100% { transform: scale(0.98); opacity: 0.5; filter: blur(14px); }
+}
+
+/* subtle responsiveness */
+@media (max-width: 720px) {
+  .ai-panel { padding: 20px; width: 94%; }
+  .ai-circle-wrap { width: 260px; height: 260px; }
+  .ai-mode-circle { width: 220px; height: 220px; }
+  .ai-mode-label { font-size: 28px; }
+  .ai-title { font-size: 18px; }
+  .ai-arrow { width: 44px; height: 44px; }
+}
