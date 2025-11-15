@@ -17,7 +17,7 @@ interface ActiveSimulation {
   userIds: string[];
 }
 
-const SIMULATED_TIME_MULTIPLIER = 30; // 1 real second = 30 simulated seconds
+const SIMULATED_TIME_MULTIPLIER = 10; // 1 real second = 10 simulated seconds
 const MEASUREMENT_INTERVAL = 1000; // Take measurement every 1 second (real time)
 
 const activeSimulations = new Map<string, ActiveSimulation>();
@@ -58,7 +58,7 @@ export const startSimulation = (input: SimulationInput = {}): string => {
   };
   simulation.data.push(initialData);
 
-  // Set up interval to take measurements every real second (= 30 simulated seconds)
+  // Set up interval to take measurements every real second (= 10 simulated seconds)
   simulation.interval = setInterval(() => {
     const elapsedRealMs = Date.now() - startTime;
     const elapsedSimulatedSeconds = (elapsedRealMs / 1000) * SIMULATED_TIME_MULTIPLIER;
@@ -71,7 +71,7 @@ export const startSimulation = (input: SimulationInput = {}): string => {
     }
 
     // Simulate gradual temperature and humidity increase from 40°C/30% to target values
-    const progressRatio = elapsedSimulatedSeconds / maxSimulatedSeconds;
+    const progressRatio = elapsedSimulatedSeconds / (5 * 60);
     const baseTemperature = 40 + progressRatio * (targetTemperature - 40);
     const temperatureVariation = (Math.random() - 0.5) * 2;
     const temperature = Math.round((baseTemperature + temperatureVariation) * 10) / 10;
