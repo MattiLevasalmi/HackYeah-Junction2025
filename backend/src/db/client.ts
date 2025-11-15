@@ -1,6 +1,7 @@
 import { MongoClient, ServerApiVersion, Db, Collection } from "mongodb";
 
 export interface User {
+  _id: string
   email: string
   firstName: string
   lastName: string

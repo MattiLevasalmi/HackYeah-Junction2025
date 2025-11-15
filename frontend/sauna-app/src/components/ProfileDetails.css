@@ -1,0 +1,401 @@
+/* Profile Details Container */
+.profile-details-container {
+  min-height: 100%;
+  background: #0a0a0a;
+  position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Background Effects */
+.profile-background-effects {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heat-wave-effect {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+}
+
+.glow-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.glow-orb-top {
+  top: 5rem;
+  left: 2.5rem;
+  width: 16rem;
+  height: 16rem;
+  background: rgba(220, 38, 38, 0.2);
+  filter: blur(100px);
+}
+
+.glow-orb-bottom {
+  bottom: 5rem;
+  right: 2.5rem;
+  width: 20rem;
+  height: 20rem;
+  background: rgba(234, 88, 12, 0.2);
+  filter: blur(120px);
+}
+
+/* Content */
+.profile-content {
+  position: relative;
+  z-index: 10;
+  max-width: 42rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+/* Profile Header */
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.profile-picture-wrapper {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.profile-glow-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(to bottom right, rgb(239, 68, 68), rgb(249, 115, 22), rgb(234, 179, 8));
+  filter: blur(3rem);
+  opacity: 0.6;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.profile-gradient-ring {
+  position: relative;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  padding: 0.25rem;
+  background: linear-gradient(to bottom right, rgb(239, 68, 68), rgb(249, 115, 22), rgb(234, 179, 8));
+}
+
+.profile-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #0a0a0a;
+}
+
+.profile-name {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(to right, rgb(251, 146, 60), rgb(248, 113, 113), rgb(252, 211, 77));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 30px rgba(251, 146, 60, 0.5), 0 0 60px rgba(251, 146, 60, 0.3);
+}
+
+.profile-info-grid {
+  width: 100%;
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(to right, #1a1a1a, #151515);
+  border: 1px solid rgba(234, 88, 12, 0.2);
+  backdrop-filter: blur(4px);
+}
+
+.info-label {
+  color: rgba(251, 146, 60, 0.8);
+  text-shadow: 0 0 10px rgba(251, 146, 60, 0.3);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.info-value {
+  background: linear-gradient(to right, rgb(253, 186, 116), rgb(252, 165, 165));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 20px rgba(251, 146, 60, 0.4);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 500;
+}
+
+/* Achievements Section */
+.achievements-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section-title-wrapper {
+  position: relative;
+}
+
+.section-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  background: linear-gradient(to right, rgb(251, 146, 60), rgb(248, 113, 113), rgb(252, 211, 77));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-align: center;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 30px rgba(251, 146, 60, 0.4);
+}
+
+.title-underline {
+  position: absolute;
+  bottom: -0.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8rem;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgb(249, 115, 22), transparent);
+}
+
+/* Streak Counter */
+.streak-counter-wrapper {
+  position: relative;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.streak-counter-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(220, 38, 38, 0.3), rgba(234, 88, 12, 0.3), rgba(234, 179, 8, 0.3));
+  border-radius: 1.5rem;
+  filter: blur(3rem);
+}
+
+.streak-counter {
+  position: relative;
+  padding: 1.5rem 2rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(to bottom right, #1a1a1a, #0f0f0f);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+.streak-counter-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.streak-icon-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.streak-icon-container {
+  position: relative;
+}
+
+.streak-icon-glow {
+  position: absolute;
+  inset: 0;
+  background: rgba(249, 115, 22, 0.5);
+  border-radius: 50%;
+  filter: blur(3rem);
+}
+
+.streak-icon {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+  color: rgb(251, 146, 60);
+  filter: drop-shadow(0 0 10px rgba(251, 146, 60, 0.8));
+}
+
+.streak-label {
+  color: rgba(251, 146, 60, 0.7);
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.streak-value {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  font-weight: 700;
+  background: linear-gradient(to right, rgb(253, 186, 116), rgb(252, 165, 165));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 0 20px rgba(251, 146, 60, 0.5);
+}
+
+.streak-badge {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  background: linear-gradient(to right, rgba(234, 88, 12, 0.2), rgba(220, 38, 38, 0.2));
+  border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+.streak-badge-text {
+  color: rgb(253, 186, 116);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Achievements Grid */
+.achievements-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+@media (min-width: 640px) {
+  .achievements-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Badge */
+.badge-wrapper {
+  position: relative;
+}
+
+.badge-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom right, rgba(249, 115, 22, 0.4), rgba(220, 38, 38, 0.4), rgba(234, 179, 8, 0.4));
+  border-radius: 1rem;
+  filter: blur(3rem);
+}
+
+.badge-container {
+  position: relative;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s;
+}
+
+.badge-earned {
+  background: linear-gradient(to bottom right, #1a1a1a, #0f0f0f);
+  border: 1px solid rgba(249, 115, 22, 0.4);
+}
+
+.badge-locked {
+  background: rgba(21, 21, 21, 0.5);
+  border: 1px solid rgba(31, 41, 55, 0.4);
+}
+
+.badge-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.badge-icon-wrapper {
+  position: relative;
+}
+
+.ember-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(251, 146, 60, 0.6), rgba(220, 38, 38, 0.6), rgba(234, 88, 12, 0.6), rgba(251, 146, 60, 0.6));
+}
+
+.badge-icon-container {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-icon-earned {
+  background: linear-gradient(to bottom right, rgba(234, 88, 12, 0.3), rgba(220, 38, 38, 0.3));
+}
+
+.badge-icon-locked {
+  background: rgba(31, 41, 55, 0.3);
+}
+
+.badge-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.icon-earned {
+  color: rgb(251, 146, 60);
+  filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.6));
+}
+
+.icon-locked {
+  color: rgb(75, 85, 99);
+}
+
+.badge-name {
+  text-align: center;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.badge-name-earned {
+  color: rgb(253, 186, 116);
+  text-shadow: 0 0 15px rgba(251, 146, 60, 0.3);
+}
+
+.badge-name-locked {
+  color: rgb(75, 85, 99);
+}
+
+.badge-lock-icon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  background: rgba(31, 41, 55, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-lock-icon span {
+  color: rgb(107, 114, 128);
+  font-size: 0.75rem;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

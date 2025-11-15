@@ -6,12 +6,14 @@ import { SaunaView } from "./components/SaunaView";
 import { AISaunaMode } from "./components/AISaunaMode";
 import { AISaunaRecommendation } from "./components/AISaunaRecommendation";
 import { motion, AnimatePresence } from "motion/react";
+import { ProfileDetails } from "./components/ProfileDetails";
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<'start' | 'next' | 'sauna' | 'ai' | 'aiRec'>('start');
+  const [currentScreen, setCurrentScreen] = useState<'start' | 'next' | 'sauna' | 'ai' | 'aiRec' | 'profile'>('start');
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const handleNext = () => setCurrentScreen('next');
+  const handleProfile = () => setCurrentScreen('profile');
   const handleBack = () => {
     setCurrentScreen('start');
     setSelectedUsers([]);
@@ -37,6 +39,7 @@ export default function App() {
                 selectedUsers={selectedUsers}
                 setSelectedUsers={setSelectedUsers}
                 onNext={handleNext}
+                onProfile={handleProfile}
               />
             )}
 
@@ -96,6 +99,10 @@ export default function App() {
                 onStartSauna={() => setCurrentScreen('sauna')} // Start full-page sauna
               />
             )}
+            {currentScreen === 'profile' && (
+              <ProfileDetails selectedUser={selectedUsers[0]} onBack={handleBack} />
+            )}
+
           </PhoneEmulator>
         </div>
       )}
