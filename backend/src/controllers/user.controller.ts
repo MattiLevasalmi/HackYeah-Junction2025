@@ -7,12 +7,15 @@ export const getUsers = (req: Request, res: Response) => {
 };
 
 export const createUser = (req: Request, res: Response) => {
-  const { name } = req.body;
+  const { name, imagePath } = req.body;
 
   if (!name) {
     return res.status(400).json({ message: "Name is required" });
   }
+  if (!imagePath) {
+    return res.status(400).json({ message: "Image Path is required" });
+  }
 
-  const newUser = createNewUser(name);
+  const newUser = createNewUser(name, imagePath);
   res.status(201).json({ user: newUser });
 };

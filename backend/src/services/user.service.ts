@@ -5,10 +5,11 @@ export const getAllUsers = (): User[] => {
   return users;
 };
 
-export const createNewUser = (name: string): User => {
+export const createNewUser = (name: string, imagePath: string): User => {
   const newUser: User = {
     userId: uuidv4(),
-    name
+    name,
+    imagePath
   };
 
   users.push(newUser);
