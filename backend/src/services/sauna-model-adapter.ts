@@ -1,4 +1,5 @@
 import axios from 'axios';
+import path from 'path';
 
 // Types
 export interface UserSaunaData {
@@ -89,10 +90,12 @@ export class SaunaModelAdapter {
    * Load target statistics from JSON file
    */
   async loadTargetStatistics(statsPath: string): Promise<void> {
-    const fs = await import('fs/promises');
-    const data = await fs.readFile(statsPath, 'utf-8');
-    this.targetStats = JSON.parse(data);
-  }
+  // Resolve relative to this file
+  const resolvedPath = path.resolve(__dirname, statsPath);
+  const fs = await import('fs/promises');
+  const data = await fs.readFile(resolvedPath, 'utf-8');
+  this.targetStats = JSON.parse(data);
+}
   
   /**
    * Validate user input data

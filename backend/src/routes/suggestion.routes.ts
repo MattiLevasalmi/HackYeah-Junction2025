@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { getSuggestions } from "../controllers/suggestion.controller";
+import { getModelHealth, getSuggestion, getSuggestionBatch } from "../controllers/suggestion.controller";
 
 const router = Router();
 
-router.get("/", getSuggestions);
+router.post('/api/sauna/recommend', getSuggestion);
+router.post('/api/sauna/recommend-batch', getSuggestionBatch);
+router.get('/api/sauna/health', getModelHealth)
 
 export default router;

@@ -58,37 +58,35 @@ export const startSimulation = (input: SimulationInput = {}): string => {
   };
   simulation.data.push(initialData);
 
-  // Set up interval to take measurements every real second (= 10 simulated seconds)
-  simulation.interval = setInterval(() => {
-    const elapsedRealMs = Date.now() - startTime;
-    const elapsedSimulatedSeconds = (elapsedRealMs / 1000) * SIMULATED_TIME_MULTIPLIER;
-    const maxSimulatedSeconds = durationMinutes * 60;
+    // Set up interval to take measurements every real second (= 10 simulated seconds)
+    simulation.interval = setInterval(() => {
+        const elapsedRealMs = Date.now() - simulation.startTime;
+        const elapsedSimulatedSeconds = (elapsedRealMs / 1000) * SIMULATED_TIME_MULTIPLIER;
+        const maxSimulatedSeconds = simulation.targetDurationMinutes * 60; // <- use current value
 
-    if (elapsedSimulatedSeconds >= maxSimulatedSeconds) {
-      // Simulation complete
-      endSimulationInternal(simulationId);
-      return;
-    }
+        const heatUpDuration = 5 * 60; // 5 minutes in simulated seconds
+        const progressRatio = Math.min(1, elapsedSimulatedSeconds / heatUpDuration);
 
-    // Simulate gradual temperature and humidity increase from 40°C/30% to target values
-    const progressRatio = elapsedSimulatedSeconds / (5 * 60);
-    const baseTemperature = 40 + progressRatio * (targetTemperature - 40);
-    const temperatureVariation = (Math.random() - 0.5) * 2;
-    const temperature = Math.round((baseTemperature + temperatureVariation) * 10) / 10;
+        // Temperature uses current target
+        const baseTemperature = 40 + progressRatio * (simulation.targetTemperature - 40);
+        const temperatureVariation = (Math.random() - 0.5) * (progressRatio < 1 ? 2 : 1);
+        const temperature = Math.round((baseTemperature + temperatureVariation) * 10) / 10;
 
-    const baseHumidity = 30 + progressRatio * (targetHumidity - 30);
-    const humidityVariation = (Math.random() - 0.5) * 3;
-    const humidity = Math.max(0, Math.min(100, Math.round((baseHumidity + humidityVariation) * 10) / 10));
+        // Humidity uses current target
+        const baseHumidity = 30 + progressRatio * (simulation.targetHumidity - 30);
+        const humidityVariation = (Math.random() - 0.5) * (progressRatio < 1 ? 3 : 1.5);
+        const humidity = Math.max(0, Math.min(100, Math.round((baseHumidity + humidityVariation) * 10) / 10));
 
-    const measurement: SimulationData = {
-      timestamp: elapsedSimulatedSeconds,
-      temperature,
-      humidity,
-      duration: elapsedSimulatedSeconds,
-    };
+        const measurement: SimulationData = {
+            timestamp: elapsedSimulatedSeconds,
+            temperature,
+            humidity,
+            duration: elapsedSimulatedSeconds,
+        };
 
-    simulation.data.push(measurement);
-  }, MEASUREMENT_INTERVAL);
+        simulation.data.push(measurement);
+    }, MEASUREMENT_INTERVAL);
+
 
   activeSimulations.set(simulationId, simulation);
   return simulationId;

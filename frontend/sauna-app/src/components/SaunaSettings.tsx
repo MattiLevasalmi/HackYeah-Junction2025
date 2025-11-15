@@ -3,8 +3,11 @@ import { Power, Thermometer, Sun, Clock, Droplets, ChevronRight } from 'lucide-r
 import { ControlSlider } from './ControlSlider';
 import { QuickPreset } from './QuickPreset';
 import './SaunaSettings.css';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 interface SaunaSettingsProps {
+  simulationId: string;
   temperature: number;
   setTemperature: (value: number) => void;
   lighting: number;
@@ -14,10 +17,11 @@ interface SaunaSettingsProps {
   steamLevel: number;
   setSteamLevel: (value: number) => void;
   isPowerOn: boolean;
-  setIsPowerOn: (value: boolean) => void;
+  onEnd: () => void;
 }
 
 export function SaunaSettings({
+  simulationId,
   temperature,
   setTemperature,
   lighting,
@@ -27,8 +31,34 @@ export function SaunaSettings({
   steamLevel,
   setSteamLevel,
   isPowerOn,
-  setIsPowerOn
+  onEnd
 }: SaunaSettingsProps) {
+  const updateSimulation = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/simulation/${simulationId}/update`,
+        {
+          targetTemperature: temperature,
+          targetHumidity: steamLevel,
+          duration: timer,
+        }
+      );
+      console.log(response);
+    } catch (err) {
+        console.error("Update error:", err);
+    }
+  }
+
+  const endSimulation = async () => {
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/api/simulation/${simulationId}/end`
+      );
+      onEnd();
+    } catch (err) {
+        console.error("Update error:", err);
+    }
+  }
   const presets = [
     { name: 'Mild', temp: 60, time: 20, steam: 30 },
     { name: 'Cozy', temp: 75, time: 30, steam: 40 },
@@ -39,8 +69,13 @@ export function SaunaSettings({
     setTemperature(preset.temp);
     setTimer(preset.time);
     setSteamLevel(preset.steam);
-    setIsPowerOn(true);
+    // call backend to start a simulation; after success power will be set on
+    //updateSimulation(preset);
   };
+
+  useEffect(() => {
+    updateSimulation();
+  }, [temperature, steamLevel, timer]);
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} className="sauna-settings-scroll space-y-6">
@@ -56,10 +91,9 @@ export function SaunaSettings({
               <p className="text-neutral-500">{isPowerOn ? 'System Active' : 'System Off'}</p>
             </div>
           </div>
-
           {/* Power toggle */}
           <button
-            onClick={() => setIsPowerOn(!isPowerOn)}
+            onClick={() => endSimulation()}
             className={`relative w-16 h-9 rounded-full transition-all duration-300 ${
               isPowerOn ? 'bg-gradient-to-r from-orange-600 to-red-600' : 'bg-neutral-700'
             }`}
@@ -69,6 +103,7 @@ export function SaunaSettings({
               animate={{ x: isPowerOn ? 28 : 0 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
             />
+            End
           </button>
         </div>
       </div>

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { StartScreen } from "./components/StartScreen";
 import { NextScreen } from "./components/NextScreen";
 import { PhoneEmulator } from "./components/PhoneEmulator";
-import { SaunaView } from "./components/SaunaView";
+import { SaunaView, Settings } from "./components/SaunaView";
 import { AISaunaMode } from "./components/AISaunaMode";
 import { AISaunaRecommendation } from "./components/AISaunaRecommendation";
 import { motion, AnimatePresence } from "motion/react";
@@ -11,6 +11,8 @@ import { ProfileDetails } from "./components/ProfileDetails";
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<'start' | 'next' | 'sauna' | 'ai' | 'aiRec' | 'profile'>('start');
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const [simulationId, setSimulationId] = useState<string>('');
+  const [settings, setSettings] = useState<Settings | null>(null);
 
   const handleNext = () => setCurrentScreen('next');
   const handleProfile = () => setCurrentScreen('profile');
@@ -22,7 +24,7 @@ export default function App() {
   return (
     <>
       {currentScreen === 'sauna' ? (
-        <SaunaView /> // Full-page sauna view
+        <SaunaView simulationId={simulationId} settings={settings!} onEnd={handleBack}/> // Full-page sauna view
       ) : (
         <div className="min-h-screen w-full bg-gradient-to-br from-zinc-950 via-neutral-900 to-zinc-900 
                         flex items-center justify-center p-4 sm:p-8 relative overflow-hidden">
@@ -96,7 +98,11 @@ export default function App() {
               <AISaunaRecommendation
                 users={selectedUsers}
                 onBack={() => setCurrentScreen('ai')}       // Back to AI selection
-                onStartSauna={() => setCurrentScreen('sauna')} // Start full-page sauna
+                onStartSauna={(id: string, settings: Settings) => {            // Accept simulationId
+                  setSimulationId(id);                     // Save it to state
+                  setSettings(settings);
+                  setCurrentScreen('sauna');              // Go to sauna
+                }} // Start full-page sauna
               />
             )}
             {currentScreen === 'profile' && (
