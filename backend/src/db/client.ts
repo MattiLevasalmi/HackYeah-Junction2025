@@ -1,11 +1,59 @@
+import { MongoClient, ServerApiVersion, Db, Collection } from "mongodb";
+
 export interface User {
+  _id?: string;
   userId: string;
   name: string;
   imagePath: string;
+  age: number;
+  gender: string;
 }
 
-export const users: User[] = [
-  { userId: "f449d263-a4cd-45e7-a1ac-bc38f3600ec8", name: "Alice", imagePath: 'images/users/Alice.svg' },
-  { userId: "296765fb-9210-4bcc-8585-691df07c5ffa", name: "Bob", imagePath: 'images/users/Bob.svg' },
-  { userId: "4203b09e-35b7-4882-92d3-257c33bc45ee", name: "Joe", imagePath: 'images/users/Joe.svg' }
-];
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_URL}/?appName=${process.env.DB_CLUSTER}`;
+
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  },
+});
+
+let db: Db;
+let usersCollection: Collection<User>;
+
+export const connectDB = async () => {
+  try {
+    // validate required env vars early to provide clearer errors
+    const missing: string[] = [];
+    if (!process.env.DB_USERNAME) missing.push('DB_USER');
+    if (!process.env.DB_PASSWORD) missing.push('DB_PASSWORD');
+    if (!process.env.DB_URL) missing.push('DB_URL');
+    if (!process.env.DB_NAME) missing.push('DB_NAME');
+    if (missing.length > 0) {
+      const err = new Error(`Missing required DB env vars: ${missing.join(', ')}`);
+      console.error('✗ Failed to connect to MongoDB:', err.message);
+      throw err;
+    }
+
+    await client.connect();
+    db = client.db(process.env.DB_NAME);
+    usersCollection = db.collection<User>("Users");
+    console.log("✓ Connected to MongoDB");
+  } catch (error) {
+    console.error("✗ Failed to connect to MongoDB:", error);
+    throw error;
+  }
+};
+
+export const getDB = () => db;
+export const getUsersCollection = () => usersCollection;
+
+export const disconnectDB = async () => {
+  try {
+    await client.close();
+    console.log("✓ Disconnected from MongoDB");
+  } catch (error) {
+    console.error("✗ Failed to disconnect from MongoDB:", error);
+  }
+};
