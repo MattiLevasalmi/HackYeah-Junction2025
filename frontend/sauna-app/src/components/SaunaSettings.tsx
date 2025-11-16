@@ -59,6 +59,7 @@ export function SaunaSettings({
         console.error("Update error:", err);
     }
   }
+  
   const presets = [
     { name: 'Mild', temp: 60, time: 20, steam: 30 },
     { name: 'Cozy', temp: 75, time: 30, steam: 40 },
