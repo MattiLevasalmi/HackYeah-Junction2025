@@ -92,7 +92,7 @@ export function AISaunaRecommendation({ users, onBack, onStartSauna }: AISaunaRe
             <span>{preset?.breaks}</span>
           </div>
           <div className="ai-rec-row">
-            <span>Stress Level After Sauna:</span>
+            <span>Stress Level:</span>
             <span>{preset?.stressLevel}/10</span>
           </div>
           <div className="ai-rec-row">

@@ -49,7 +49,7 @@ export function SaunaView({ simulationId, settings, onEnd, fullWidth }: SaunaVie
             temperature={temperature} 
             glowColor={getGlowColor(temperature)} 
           />
-          <SessionStatus isPowerOn={isPowerOn} simulationId={simulationId} />
+          <SessionStatus isPowerOn={isPowerOn} simulationId={simulationId} targetTemperature={temperature} />
         </div>
 
           {/* Settings Panel */}
