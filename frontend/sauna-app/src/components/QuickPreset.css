@@ -1,0 +1,417 @@
+/* Quick Preset Button Container */
+.quick-preset-button {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Glassmorphism effect */
+.quick-preset-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.quick-preset-button:hover::before {
+  opacity: 1;
+}
+
+/* Animated border gradient on hover */
+.quick-preset-button::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, #ea580c, #dc2626, #ea580c);
+  background-size: 200% 200%;
+  border-radius: 1rem;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 0.3s ease;
+  animation: gradient-rotate 3s linear infinite;
+}
+
+@keyframes gradient-rotate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.quick-preset-button:hover::after {
+  opacity: 0.3;
+}
+
+/* Glow effect on hover */
+.quick-preset-button:hover {
+  box-shadow: 
+    0 0 30px rgba(234, 88, 12, 0.15),
+    0 10px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+.quick-preset-button:active {
+  transform: translateY(0px);
+  box-shadow: 
+    0 0 20px rgba(234, 88, 12, 0.1),
+    0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Preset name styling */
+.quick-preset-name {
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.quick-preset-button:hover .quick-preset-name {
+  letter-spacing: 0.02em;
+  text-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+}
+
+/* Underline effect on preset name */
+.quick-preset-name::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #ea580c, #dc2626);
+  transition: width 0.3s ease;
+}
+
+.quick-preset-button:hover .quick-preset-name::after {
+  width: 100%;
+}
+
+/* Stats container */
+.quick-preset-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+/* Individual stat row */
+.quick-preset-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  transition: all 0.3s ease;
+  transform-origin: left center;
+}
+
+.quick-preset-button:hover .quick-preset-stat {
+  transform: translateX(2px);
+}
+
+/* Stagger animation for stats on hover */
+.quick-preset-button:hover .quick-preset-stat:nth-child(1) {
+  transition-delay: 0.05s;
+}
+
+.quick-preset-button:hover .quick-preset-stat:nth-child(2) {
+  transition-delay: 0.1s;
+}
+
+.quick-preset-button:hover .quick-preset-stat:nth-child(3) {
+  transition-delay: 0.15s;
+}
+
+/* Icon styling */
+.quick-preset-icon {
+  transition: all 0.3s ease;
+  color: #a3a3a3;
+}
+
+.quick-preset-button:hover .quick-preset-stat:nth-child(1) .quick-preset-icon {
+  color: #ea580c;
+  filter: drop-shadow(0 0 4px rgba(234, 88, 12, 0.5));
+  transform: rotate(5deg);
+}
+
+.quick-preset-button:hover .quick-preset-stat:nth-child(2) .quick-preset-icon {
+  color: #3b82f6;
+  filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.5));
+  transform: scale(1.1);
+}
+
+.quick-preset-button:hover .quick-preset-stat:nth-child(3) .quick-preset-icon {
+  color: #06b6d4;
+  filter: drop-shadow(0 0 4px rgba(6, 182, 212, 0.5));
+  transform: translateY(-1px);
+}
+
+/* Stat value styling */
+.quick-preset-value {
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.quick-preset-button:hover .quick-preset-value {
+  color: #e5e5e5;
+  font-weight: 600;
+}
+
+/* Ripple effect on click */
+.quick-preset-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(249, 115, 22, 0.4);
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Badge indicator for recommended preset (optional) */
+.quick-preset-badge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.125rem 0.5rem;
+  background: linear-gradient(135deg, #ea580c, #dc2626);
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0.5rem;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.3s ease;
+}
+
+.quick-preset-button:hover .quick-preset-badge {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Selected state (if implemented) */
+.quick-preset-button.selected {
+  background: rgba(234, 88, 12, 0.15);
+  border-color: #ea580c;
+  box-shadow: 
+    0 0 20px rgba(234, 88, 12, 0.3),
+    inset 0 0 20px rgba(234, 88, 12, 0.1);
+}
+
+.quick-preset-button.selected .quick-preset-name {
+  color: #f97316;
+}
+
+/* Shimmer effect on load */
+@keyframes shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.quick-preset-button.loading::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Focus state for accessibility */
+.quick-preset-button:focus-visible {
+  outline: 2px solid rgba(249, 115, 22, 0.6);
+  outline-offset: 3px;
+  box-shadow: 
+    0 0 0 4px rgba(249, 115, 22, 0.2),
+    0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Disabled state */
+.quick-preset-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+  pointer-events: none;
+}
+
+.quick-preset-button:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Grid layout enhancement for parent container */
+.quick-preset-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .quick-preset-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Hover lift animation */
+.quick-preset-button {
+  will-change: transform;
+}
+
+/* Inner content wrapper */
+.quick-preset-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Gradient background on hover */
+.quick-preset-button:hover {
+  background: linear-gradient(135deg, rgba(38, 38, 38, 0.8) 0%, rgba(23, 23, 23, 0.9) 100%);
+}
+
+/* Smooth color transitions */
+.quick-preset-button * {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .quick-preset-button,
+  .quick-preset-button * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .quick-preset-button {
+    border: 2px solid currentColor;
+  }
+  
+  .quick-preset-button:hover {
+    border-color: #f97316;
+  }
+}
+
+/* Mobile touch optimizations */
+@media (pointer: coarse) {
+  .quick-preset-button {
+    padding: 1.25rem;
+    min-height: 140px;
+  }
+}
+
+/* Preset type indicators (different colors for different presets) */
+.quick-preset-button[data-preset="gentle"]:hover {
+  border-color: rgba(34, 197, 94, 0.5);
+  box-shadow: 0 0 30px rgba(34, 197, 94, 0.1);
+}
+
+.quick-preset-button[data-preset="classic"]:hover {
+  border-color: rgba(249, 115, 22, 0.5);
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.15);
+}
+
+.quick-preset-button[data-preset="intense"]:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.2);
+}
+
+/* Micro-interaction: pulse on mount */
+@keyframes preset-mount {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.quick-preset-button {
+  animation: preset-mount 0.4s ease-out;
+}
+
+/* Stagger for multiple presets */
+.quick-preset-button:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.quick-preset-button:nth-child(2) {
+  animation-delay: 0.1s;
+}
+
+.quick-preset-button:nth-child(3) {
+  animation-delay: 0.2s;
+}
+
+/* Active pulse effect */
+.quick-preset-button:active {
+  animation: none;
+}
+
+/* Background pattern (subtle) */
+.quick-preset-button {
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
+}
+
+/* Text selection prevention */
+.quick-preset-button {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Better anti-aliasing */
+.quick-preset-name,
+.quick-preset-value {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Success feedback after click (optional) */
+@keyframes success-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+  }
+}
+
+.quick-preset-button.success {
+  animation: success-pulse 0.6s ease-out;
+}
