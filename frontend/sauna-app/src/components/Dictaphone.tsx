@@ -33,10 +33,9 @@ const Dictaphone: React.FC<DictaphoneProps> = ({
     return <span>Browser doesn't support speech recognition.</span>;
   }
 
-  // Start continuous listening
-  useEffect(() => {
+  const handleMicrophone = () => {
     SpeechRecognition.startListening({ continuous: true, language: "en-US" });
-  }, []);
+  }
 
   // Watch transcript updates
   useEffect(() => {
@@ -185,9 +184,39 @@ const Dictaphone: React.FC<DictaphoneProps> = ({
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "sans-serif", marginTop: "-150px" }}>
+    <div style={{ padding: "20px", fontFamily: "sans-serif", marginTop: "-90px" }}>
       <h2>🎙Voice Assistant</h2>
-      <p>Listening: {listening ? "✅ on" : "❌ off"}</p>
+      {listening ? (
+        <p>Listening: ✅ on</p>
+      ) : (
+        <>
+          <p>Your Microphone is not yet active</p>
+          <button 
+            onClick={handleMicrophone}
+            style={{
+              padding: "0.5rem 1rem",
+              backgroundColor: "#111",
+              color: "white",
+              border: "none",
+              borderRadius: "0.5rem",
+              cursor: "pointer",
+              boxShadow: "0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5)",
+              transition: "box-shadow 0.3s ease, transform 0.2s ease",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.boxShadow =
+                "0 0 20px white, 0 0 40px rgba(255, 255, 255, 0.7)";
+              e.currentTarget.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.boxShadow =
+                "0 0 10px white, 0 0 20px rgba(255, 255, 255, 0.5)";
+              e.currentTarget.style.transform = "scale(1)";
+            }}>
+            Enable Microphone
+          </button>
+        </>
+      )}
       <p>
         <strong>Trigger phrase:</strong> Say <em>"Hello Sauna"</em> to start.
       </p>
