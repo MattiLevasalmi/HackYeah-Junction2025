@@ -179,25 +179,7 @@ export function SaunaSettings({
         />
       </div>
 
-      {/* Additional Features Card */}
-      <div className="bg-gradient-to-br from-neutral-900 to-neutral-950 rounded-3xl p-6 border border-neutral-800/50 shadow-2xl">
-        <div className="space-y-3">
-          <button className="w-full flex items-center justify-between p-4 bg-neutral-800/50 hover:bg-neutral-800 rounded-2xl transition-all duration-200 group">
-            <span className="text-neutral-300">Schedule Session</span>
-            <ChevronRight className="w-5 h-5 text-neutral-500 group-hover:text-neutral-300 transition-colors" />
-          </button>
-          
-          <button className="w-full flex items-center justify-between p-4 bg-neutral-800/50 hover:bg-neutral-800 rounded-2xl transition-all duration-200 group">
-            <span className="text-neutral-300">History & Analytics</span>
-            <ChevronRight className="w-5 h-5 text-neutral-500 group-hover:text-neutral-300 transition-colors" />
-          </button>
-          
-          <button className="w-full flex items-center justify-between p-4 bg-neutral-800/50 hover:bg-neutral-800 rounded-2xl transition-all duration-200 group">
-            <span className="text-neutral-300">Safety Settings</span>
-            <ChevronRight className="w-5 h-5 text-neutral-500 group-hover:text-neutral-300 transition-colors" />
-          </button>
-        </div>
-      </div>
+      
     </motion.div>
   );
 }

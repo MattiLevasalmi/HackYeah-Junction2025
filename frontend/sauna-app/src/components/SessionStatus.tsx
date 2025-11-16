@@ -4,15 +4,14 @@ import axios from "axios";
 interface SessionStatusProps {
   isPowerOn: boolean;
   simulationId: string;
+  targetTemperature: number;
 }
 
-export function SessionStatus({ isPowerOn, simulationId }: SessionStatusProps) {
+export function SessionStatus({ isPowerOn, simulationId, targetTemperature }: SessionStatusProps) {
   const [temperature, setTemperature] = useState<number>(0);
   const [humidity, setHumidity] = useState<number>(0);
   const [duration, setDuration] = useState<string>("00:00");
   const [loopInProgress, setLoop] = useState<boolean>(false);
-
-  let intervalRef: NodeJS.Timeout | null = null;
 
   const formatDuration = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -20,51 +19,54 @@ export function SessionStatus({ isPowerOn, simulationId }: SessionStatusProps) {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
-  const startLoop = () => {
-    if (loopInProgress) return;
+  // Start/stop loop when power changes
+  useEffect(() => {
+    if (isPowerOn && !loopInProgress) {
+      setLoop(true);
+    } else if (!isPowerOn && loopInProgress) {
+      setLoop(false);
+    }
+  }, [isPowerOn]);
 
-    setLoop(true);
+  // Poll backend for humidity and duration
+  useEffect(() => {
+    if (!loopInProgress) return;
 
-    intervalRef = setInterval(async () => {
+    const interval = setInterval(async () => {
       try {
         const response = await axios.get(
           `http://localhost:3000/api/simulation/${simulationId}/current`
         );
-
         const data = response.data.data;
         const status = response.data.status;
 
-        if (!status.isRunning) return; // Stop if backend says simulation ended
+        if (!status.isRunning) return;
 
-        setTemperature(data.temperature);
         setHumidity(data.humidity);
         setDuration(`${formatDuration(data.duration)} / ${status.targetDuration}:00`);
       } catch (err) {
         console.error("Polling error:", err);
       }
     }, 1000);
-  };
 
-  const stopLoop = () => {
-    setLoop(false);
-    if (intervalRef) {
-      clearInterval(intervalRef);
-      intervalRef = null;
-    }
-  };
+    return () => clearInterval(interval);
+  }, [loopInProgress, simulationId]);
 
-  // Manage power on/off changes
+  // Gradually adjust temperature toward target
   useEffect(() => {
-    if (isPowerOn && !loopInProgress) {
-      startLoop();
-    } else if (!isPowerOn && loopInProgress) {
-      stopLoop();
-    }
+    if (!loopInProgress) return;
 
-    return () => {
-      stopLoop();
-    };
-  }, [isPowerOn]);
+    const rampInterval = setInterval(() => {
+      setTemperature((prevTemp) => {
+        const diff = targetTemperature - prevTemp;
+        const step = 0.5; // °C per second
+        if (Math.abs(diff) < step) return targetTemperature;
+        return prevTemp + Math.sign(diff) * step;
+      });
+    }, 1000);
+
+    return () => clearInterval(rampInterval);
+  }, [loopInProgress, targetTemperature]);
 
   return (
     <div className="mt-6 bg-gradient-to-br from-neutral-900 to-neutral-950 rounded-3xl p-6 border border-neutral-800/50 shadow-2xl glass-card hover-lift">
@@ -72,7 +74,7 @@ export function SessionStatus({ isPowerOn, simulationId }: SessionStatusProps) {
         <div className="flex-1">
           <div className="text-sm text-neutral-400">Temperature</div>
           <div className="text-2xl font-semibold text-white">
-            {temperature}°C
+            {temperature.toFixed(1)}°C
           </div>
         </div>
 

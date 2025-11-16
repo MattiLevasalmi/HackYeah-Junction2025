@@ -101,14 +101,11 @@ export function StartScreen({ selectedUsers, setSelectedUsers, onNext, onProfile
       </div>
 
       {selectedUsers.length === 0 && (
-        <motion.p
+        <p
           className="select-warning"
-          initial={{ opacity: 0, y: 5 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
         >
           Please select at least one user to continue
-        </motion.p>
+        </p>
       )}
 
       {selectedUsers.length > 0 && (
