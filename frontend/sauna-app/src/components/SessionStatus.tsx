@@ -35,7 +35,7 @@ export function SessionStatus({ isPowerOn, simulationId, targetTemperature }: Se
     const interval = setInterval(async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/simulation/${simulationId}/current`
+          `${import.meta.env.VITE_API_URL}/api/simulation/${simulationId}/current`
         );
         const data = response.data.data;
         const status = response.data.status;

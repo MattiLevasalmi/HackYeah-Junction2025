@@ -31,7 +31,7 @@ interface UserData {
 export function ProfileDetails({ selectedUser, onBack }: ProfileDetailsProps) {
     const [user, setUser] = useState<UserData | null>(null);
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/users/${selectedUser}`).then(res => {
+        axios.get(`${import.meta.env.VITE_API_URL}/api/users/${selectedUser}`).then(res => {
             res.data.user.imagePath = `/${res.data.user.imagePath}`
             setUser(res.data.user);
             console.log(res);

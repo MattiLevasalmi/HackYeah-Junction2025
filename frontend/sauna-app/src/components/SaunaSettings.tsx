@@ -36,7 +36,7 @@ export function SaunaSettings({
   const updateSimulation = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/simulation/${simulationId}/update`,
+        `${import.meta.env.VITE_API_URL}/api/simulation/${simulationId}/update`,
         {
           targetTemperature: temperature,
           targetHumidity: steamLevel,
@@ -52,14 +52,14 @@ export function SaunaSettings({
   const endSimulation = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:3000/api/simulation/${simulationId}/end`
+        `${import.meta.env.VITE_API_URL}/api/simulation/${simulationId}/end`
       );
       onEnd();
     } catch (err) {
         console.error("Update error:", err);
     }
   }
-  
+
   const presets = [
     { name: 'Mild', temp: 60, time: 20, steam: 30 },
     { name: 'Cozy', temp: 75, time: 30, steam: 40 },

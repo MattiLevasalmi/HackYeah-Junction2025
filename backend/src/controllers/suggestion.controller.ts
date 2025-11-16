@@ -2,9 +2,10 @@ import { Request, Response } from "express";
 import { SaunaModelAdapter } from "../services/sauna-model-adapter";
 
 const modelAdapter = new SaunaModelAdapter('http://localhost:5000');
+/*
 (async () => {
   await modelAdapter.loadTargetStatistics('../../../ml-service/models/target_statistics.json');
-})();
+})();*/
 
 export const getSuggestion = async (req: Request, res: Response) => {
   try {

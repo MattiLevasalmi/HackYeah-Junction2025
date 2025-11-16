@@ -28,7 +28,7 @@ export function AISaunaRecommendation({ users, onBack, onStartSauna }: AISaunaRe
       duration: preset?.duration,
     };
     try {
-      const resp = await axios.post('http://localhost:3000/api/simulation/start', body);
+      const resp = await axios.post(`${import.meta.env.VITE_API_URL}/api/simulation/start`, body);
       if (resp?.data?.status === 'Simulation started') {
         simId = resp.data.simulationId;
       } else {

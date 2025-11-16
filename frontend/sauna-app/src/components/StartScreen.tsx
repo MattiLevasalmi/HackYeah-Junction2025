@@ -38,7 +38,7 @@ export function StartScreen({ selectedUsers, setSelectedUsers, onNext, onProfile
   };
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/users')
+    axios.get(`${import.meta.env.VITE_API_URL}/api/users`)
       .then(res => {
         const usersWithLeadingSlash = res.data.users.map((u: User) => ({
           ...u,
